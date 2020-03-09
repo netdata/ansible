@@ -1,0 +1,18 @@
+---
+# Runs various scheduled automation workflows:
+# - ./scripts/did-nightlies-run.sh -- Whether we last successfully published nightlies
+name: Automation
+on:
+  schedule:
+    - cron: '* 1 * * *'
+  pull_request:
+jobs:
+  did-nightlies-run:
+    name: Did Nightlies Run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run did-nightlies-run.sh
+        run: |
+          .github/scripts/did-nightlies-run.sh
