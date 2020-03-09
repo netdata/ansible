@@ -1,0 +1,6 @@
+#cloud-config
+users:
+  - default
+chpasswd:
+  list: |
+    ec2-user:semaj2891
