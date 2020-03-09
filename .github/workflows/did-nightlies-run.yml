@@ -1,0 +1,15 @@
+---
+# Runs a script `did-nightlies-run.sh` to determine if we successfully
+# published nightly Docker Images, Sources and DEB/RPM packages in the
+# last ~48h.
+name: Nightlies Ran?
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+jobs:
+  did-nightlies-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run did-nightlies-run.sh
+        run: |
+          .github/did-nightlies-run.sh
