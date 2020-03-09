@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ssh -p 2222 root@138.68.182.52 /bin/sh << EOF
+ssh -p 2222 root@138.68.182.52 /bin/sh -ex << EOF
 cd /usr/src/netdata.git
 git pull -q
 cat packaging/installer/kickstart.sh > /usr/share/netdata/web/kickstart.sh

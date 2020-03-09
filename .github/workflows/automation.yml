@@ -4,7 +4,7 @@
 name: Automation
 on:
   schedule:
-    - cron: '* 1 * * *'
+    - cron: '0 * * * *'
   pull_request:
 jobs:
   did-nightlies-run:
@@ -16,3 +16,19 @@ jobs:
       - name: Run did-nightlies-run.sh
         run: |
           .github/scripts/did-nightlies-run.sh
+  update-website-kickstart-scripts:
+    name: Update Website kickstart* scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.NETDATA_RSA }}
+      - name: Append Known Hosts
+        run: |
+          echo "[138.68.182.52]:2222 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNflFMXwOua2Np1Fywr12HJTpolxxoCIdIC6pArqj1xaIXx6rk76ETzYb23wah2/91r4DRcafPXY5blzHRIZtYo=" >> $HOME/.ssh/known_hosts
+      - name: Run .github/scripts/update-website-kickstart-scripts.sh
+        run: |
+          .github/scripts/update-website-kickstart-scripts.sh
