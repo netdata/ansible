@@ -14,6 +14,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run did-nightlies-run.sh
+        env:
+          DEBUG: "1"
         run: |
           .github/scripts/did-nightlies-run.sh
   update-website-kickstart-scripts:
