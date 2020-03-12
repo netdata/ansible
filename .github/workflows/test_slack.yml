@@ -1,0 +1,46 @@
+---
+# Test Slack Notifications
+on:
+  pull_request:
+    paths:
+      - .github/workflows/test_slack.yml
+name: Test Slack
+jobs:
+  test-success:
+    name: Test Success
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run /bin/true
+        run: |
+          /bin/true
+      - name: Send Slack Notification
+        if: success()
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_TITLE: 'TEst Success'
+          SLACK_MESSAGE: 'Test Success :white_check_mark:'
+          SLACK_COLOR: '#36a64f'
+          SLACK_CHANNEL: '#automation'
+          SLACK_ICON: 'https://emoji.slack-edge.com/TCC5DL092/netdata/22679c70af359fca.png'
+          SLACK_USERNAME: netdatabot
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  test-failure:
+    name: Test Failure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run /bin/false
+        run: |
+          /bin/false
+      - name: Send Slack Notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_TITLE: 'Test Failure'
+          SLACK_MESSAGE: 'Test Failure :red_circle:'
+          SLACK_COLOR: '#a30200'
+          SLACK_CHANNEL: '#automation'
+          SLACK_ICON: 'https://emoji.slack-edge.com/TCC5DL092/netdata/22679c70af359fca.png'
+          SLACK_USERNAME: netdatabot
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
