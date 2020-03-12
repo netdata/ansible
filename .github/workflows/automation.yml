@@ -1,6 +1,7 @@
 ---
 # Runs various scheduled automation workflows:
-# - ./scripts/did-nightlies-run.sh -- Whether we last successfully published nightlies
+# - .github/scripts/did-nightlies-run.sh -- Whether we last successfully published nightlies
+# - .github/scripts/update-website-kickstart-scripts.sh
 name: Automation
 on:
   schedule:
@@ -18,6 +19,20 @@ jobs:
           DEBUG: "1"
         run: |
           .github/scripts/did-nightlies-run.sh
+      - name: Send Slack Notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2.0.0
+        env:
+          SLACK_TITLE: '@here Nightlies *NOT* published in last 48hrs'
+          SLACK_MESSAGE: |
+            The nightlies have not successfully published in the last 48hrs.
+            Please check the Travis nightly jobs (marked with `CRON`).
+          SLACK_COLOR: '#a30200'
+          SLACK_CHANNEL: '#automation'
+          SLACK_ICON: 'https://emoji.slack-edge.com/TCC5DL092/netdata/22679c70af359fca.png'
+          SLACK_USERNAME: netdatabot
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
   update-website-kickstart-scripts:
     name: Update Website kickstart* scripts
     runs-on: ubuntu-latest
