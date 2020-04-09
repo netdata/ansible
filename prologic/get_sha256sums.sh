@@ -27,8 +27,8 @@ get_release_id() {
 get_release_assets() {
   user_repo="$1"
   release_id="$2"
-  curl -sL "https://api.github.com/repos/$user_repo/releases/$release_id/assets" | # Get releases from GitHub api
-    jq -r '.[] | .browser_download_url'                                            # Extract browser_download_url(s)
+  curl -sL "https://api.github.com/repos/$user_repo/releases/$release_id/assets?page=1&per_page=100" | # Get releases from GitHub api
+    jq -r '.[] | .browser_download_url'                                                                # Extract browser_download_url(s)
 }
 
 _main() {
