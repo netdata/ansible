@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -x
+
+stack="$(basename "${1}")"
+service=${stack%%.*}
+
+docker stack deploy -c "${stack}" --prune --with-registry-auth "${service}"

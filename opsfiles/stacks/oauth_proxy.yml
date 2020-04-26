@@ -1,0 +1,37 @@
+---
+version: "3.8"
+services:
+  oauth_proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy
+    environment:
+      - OAUTH2_PROXY_PROVIDER=github
+      - OAUTH2_PROXY_EMAIL_DOMAINS=*
+      - OAUTH2_PROXY_GITHUB_ORG=netdata
+      - OAUTH2_PROXY_CLIENT_ID=f752ff8ab8c88c05bdf8
+      - OAUTH2_PROXY_CLIENT_SECRET=0dc206afc803ee5bb1948458e35e1fcd83c667f2
+      - OAUTH2_PROXY_COOKIE_SECRET=aTtJgUmW7FIZwbdjuhgVQgPoDyRhRD6r7QHl1aL6if6RHAf6U7Dis4fYzUSXkfyD
+      - OAUTH2_PROXY_COOKIE_SECURE=true
+      - OAUTH2_PROXY_REVERSE_PROXY=true
+      - OAUTH2_PROXY_HTTP_ADDRESS=0.0.0.0:4180
+      - OAUTH2_PROXY_PASS_HOST_HEADER=true
+      - OAUTH2_PROXY_PASS_USER_HEADERS=true
+      - OAUTH2_PROXY_UPSTREAMS=http://tasks.traefik:80/
+    ports:
+      - target: 4180
+        published: 4180
+        protocol: tcp
+        mode: host
+    networks:
+      - traefik
+    deploy:
+      endpoint_mode: dnsrr
+      mode: global
+      placement:
+        constraints:
+          - "node.role == manager"
+      restart_policy:
+        condition: on-failure
+
+networks:
+  traefik:
+    external: true

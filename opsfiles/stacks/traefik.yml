@@ -1,0 +1,29 @@
+---
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:latest
+    ports:
+      - "80:80/tcp"
+    networks:
+      - traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - --accesslog
+      - --entrypoints.http.address=:80
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=traefik
+      - --providers.docker.swarmmode=true
+      - --providers.docker.watch=true
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - "node.role == manager"
+
+networks:
+  traefik:
+    external: true

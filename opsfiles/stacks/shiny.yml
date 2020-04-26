@@ -1,0 +1,21 @@
+---
+version: "3.8"
+
+services:
+  shiny:
+    image: r.mills.io/netdata/github-shiny-stats
+    networks:
+      - traefik
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.services.shiny.loadbalancer.server.port=8000"
+        - "traefik.http.routers.shiny.rule=Host(`shiny.internal.netdata.cloud`)"
+      restart_policy:
+        condition: on-failure
+
+networks:
+  traefik:
+    external: true

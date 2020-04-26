@@ -1,0 +1,34 @@
+---
+version: "3.8"
+
+services:
+  golinks:
+    image: prologic/golinks
+    volumes:
+      - golinks:/data
+    command:
+      - -dbpath=/data/golinks.db
+      - -fqdn=golinks.internal.netdata.cloud
+      - -title="NetData Internal Links"
+    networks:
+      - traefik
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.hostname == ic1dm2.internal.netdata.cloud"
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.services.golinks.loadbalancer.server.port=8000"
+        - "traefik.http.routers.golinks.rule=Host(`golinks.internal.netdata.cloud`)"
+      restart_policy:
+        condition: on-failure
+
+networks:
+  traefik:
+    external: true
+
+volumes:
+  golinks:
+    driver: local
