@@ -4,7 +4,7 @@ git clone https://github.com/amoss/netdata.git fork.git
 cd fork.git
 git fetch
 git checkout reneg-fix
-CFLAGS="-DNETDATA_INTERNAL_CHECKS" ./netdata-installer.sh --dont-wait --require-cloud
+CFLAGS="-O1 -ggdb -DNETDATA_INTERNAL_CHECKS" ./netdata-installer.sh --dont-wait --require-cloud
 if [ -e /etc/netdata/claim.d/claimed_id ]; then
     echo "Already claimed"
 else
