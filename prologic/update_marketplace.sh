@@ -13,7 +13,7 @@ restore_argv() {
 
 fnmatch() {
   case "$2" in
-    $1)
+    "$1")
       return 0
       ;;
     *)
@@ -105,12 +105,12 @@ _main() {
   printf "Old Chart appVersion: %s\n" "$old_appVersion"
 
   if [ -z "$1" ]; then
-    new_version="$(bump_version "$old_version")"
+    new_appVersion="$(bump_version "$old_appVersion")"
   else
-    new_version="$1"
+    new_appVersion="$1"
   fi
 
-  new_appVersion="$(bump_version "$old_appVersion")"
+  new_version="$(bump_version "$old_version")"
 
   printf "\n"
   printf "New Chart version:    %s\n" "$new_version"
