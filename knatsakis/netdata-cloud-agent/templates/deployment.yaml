@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{ .Release.Name }}'
+  labels:
+    {{- include "labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "matchLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: '{{ .Release.Name }}'
+          image: gcr.io/netdata-cloud-testing/netdata-cloud-agent:latest
+          resources:
+            requests:
+              cpu: 125m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          env:
+            - name: CLAIM_TOKEN
+              value: {{ .Values.claim.token }}
+            - name: CLAIM_ROOM
+              value: {{ .Values.claim.room }}
+            - name: ACLK_URL
+              value: {{ .Values.aclkURL }}
+          securityContext:
+            capabilities:
+              add:
+                - SYS_PTRACE
