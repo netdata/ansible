@@ -1,5 +1,8 @@
+---
+image: 'gcr.io/netdata-cloud-stg-200202/netdata:autoclaimed'
+
+claim_token:
+claim_room:
+aclk_url: 'https://staging.netdata.cloud'
+
 replicas: 1
-claim:
-  token:
-  room:
-aclkURL: https://staging.netdata.cloud

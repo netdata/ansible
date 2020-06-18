@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: '{{ .Release.Name }}'
-          image: gcr.io/netdata-cloud-testing/netdata-cloud-agent:latest
+          image: {{ .Values.image }}
           resources:
             requests:
               cpu: 125m
@@ -27,11 +27,11 @@ spec:
               memory: 256Mi
           env:
             - name: CLAIM_TOKEN
-              value: {{ .Values.claim.token }}
+              value: {{ .Values.claim_token }}
             - name: CLAIM_ROOM
-              value: {{ .Values.claim.room }}
+              value: {{ .Values.claim_room }}
             - name: ACLK_URL
-              value: {{ .Values.aclkURL }}
+              value: {{ .Values.aclk_url }}
           securityContext:
             capabilities:
               add:
