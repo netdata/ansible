@@ -40,6 +40,7 @@ helm upgrade                                                     \
   --set claim_token=""                                           \
   --set claim_room=""                                            \
   --set aclk_url="https://dev.private.netdata.cloud"             \
+  --set replicas=1                                               \
   netdata-cloud-agent ./helm
 ```
 
@@ -56,6 +57,7 @@ helm upgrade                                                        \
   --set claim_token=""                                              \
   --set claim_room=""                                               \
   --set aclk_url="https://staging.netdata.cloud"                    \
+  --set replicas=1                                                  \
   netdata-cloud-agent ./helm
 ```
 
