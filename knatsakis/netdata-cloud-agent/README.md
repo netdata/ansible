@@ -73,3 +73,20 @@ docker run          \
 
 - For testing, the `ACLK_URL` is https://dev.private.netdata.cloud
 - For staging, the `ACLK_URL` is https://staging.netdata.cloud
+
+## Get values for `CLAIM_TOKEN`, `CLAIM_ROOM`, `ACLK_URL`
+
+To get the claim token and claim room visit your space, click the `Add` button
+and copy the values from the claiming command shown. E.g., from:
+
+```bash
+sudo netdata-claim.sh -token=AKORwHQzoRzeKseRDypY4hjzlPw_EOTw7m1fZfg_eExV0gWohHlmQ21TQ9nxu-EXwn4Iqw7Ox0DWW4QMUAd5T-Bh9Y1hOcTPuU0-S-K9qQOiVAUHQ0Xs1-M6X5qQ2c4lhPJIfJk -rooms=34a639b6-5bd8-4ad4-b4bc-af54ee6e2008 -url=https://staging.netdata.cloud
+```
+
+you get:
+
+```
+CLAIM_TOKEN="AKORwHQzoRzeKseRDypY4hjzlPw_EOTw7m1fZfg_eExV0gWohHlmQ21TQ9nxu-EXwn4Iqw7Ox0DWW4QMUAd5T-Bh9Y1hOcTPuU0-S-K9qQOiVAUHQ0Xs1-M6X5qQ2c4lhPJIfJk"
+CLAIM_ROOM="34a639b6-5bd8-4ad4-b4bc-af54ee6e2008"
+ACLK_URL="https://staging.netdata.cloud"
+```
