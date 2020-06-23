@@ -1,21 +1,15 @@
 **NB:** The Date/Times here are in UTC.
 
-> Also note that there is an "off-by-one" in the dates here in that the
-> date/time the actions are performed are precisely __after__ the typical
-> nightly job has run meaning that we announce the code freeze after the
-> nightly has run for that date, we disable the nightlies after the nightly
-> has run for that date, etc.
-
-### 2020-06-12:
+### 2020-06-12 01:00 UTC:
 - [ ] Announce soft code freeze for release in #general on Slack.~
 
-### 2020-06-13:
+### 2020-06-13 01:00 UTC:
 - [ ] Confirm there are no nwe Covertity Defects
 
-### 2020-06-14:
+### 2020-06-14 01:00 UTC:
 - [ ] Confirm there are no nwe Covertity Defects
 
-### 2020-06-15:
+### 2020-06-15 01:00 UTC:
 - [ ] Confirm there are no nwe Covertity Defects
 
 ### 2020-06-16: (after the build has run at 01:00)
@@ -34,7 +28,7 @@
 - [ ] Update Netdata Helm chart increasing the chart's version and updating all occurrences of the app version in addition to any chart changes that may be required due to new configuration or other changes in the new release for the agent.
 - [ ] Send a pull request to Digital Ocean Marketplace repository with the update to chart and app version for the agent.
 
-### 2020-06-18:
+### 2020-06-18 01:00 UTC:
 - [ ] 24 hours after the release, re-enable nightly agent builds by adding (Defining Environment Variables in Repository Settings) an environment variable with the following details:
   - Name:` RUN_NIGHTLY`
   - Value: `yes`
