@@ -39,7 +39,7 @@ helm upgrade                                                     \
   --set image="gcr.io/netdata-cloud-testing/netdata:autoclaimed" \
   --set claim_token=""                                           \
   --set claim_room=""                                            \
-  --set aclk_url="https://dev.private.netdata.cloud"             \
+  --set aclk_url="https://testing.netdata.cloud"                 \
   --set replicas=1                                               \
   netdata-cloud-agent ./helm
 ```
@@ -73,7 +73,7 @@ docker run          \
   netdata:autoclaimed
 ```
 
-- For testing, the `ACLK_URL` is https://dev.private.netdata.cloud
+- For testing, the `ACLK_URL` is https://testing.netdata.cloud
 - For staging, the `ACLK_URL` is https://staging.netdata.cloud
 
 ## Get values for `CLAIM_TOKEN`, `CLAIM_ROOM`, `ACLK_URL`
