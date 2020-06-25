@@ -23,6 +23,7 @@
 - [ ] Verify that docker images where successfully deployed to Docker Hub.
 - [ ] Verify that deb and rpm packages where successfully deployed to Packagecloud.
 - [ ] Notify the team, on Slack channel #general, that the release is complete and committing/merging to the master branch is resumed.
+- [ ] Create/Recreate `develop` branch off of `master` and inform Agent Team to push/target `develop` until we're sure we will not have a hotfix.
 - [ ] Notify the Release Manager to finalize the changelog and prepare the release notes.
 - [ ] Finalize the draft release on GitHub:
 - [ ] Update Netdata Helm chart increasing the chart's version and updating all occurrences of the app version in addition to any chart changes that may be required due to new configuration or other changes in the new release for the agent.
@@ -33,3 +34,8 @@
   - Name:` RUN_NIGHTLY`
   - Value: `yes`
   - Branch: 'All branches'
+- [ ] Update Netdata Demo Sitres
+- [ ] Update Netdata k8s Instances
+
+### 2020-06-21 11:00 UTC (_after no further hotfixes_):
+- [ ] Merge `develop` back into `master` and delete the branch.
