@@ -1,3 +1,8 @@
+---
+name: Agent Release Checklist
+about: Checklist for releasing the Netdata Agent
+---
+
 **NB:** The Date/Times here are in UTC.
 
 ### 2020-06-12 01:00 UTC:
