@@ -1,3 +1,5 @@
+* N.B.: `TRUNCATE TABLE` does not work well with the CDC: https://github.com/cockroachdb/cockroach/issues/51639#issuecomment-662431448
+
 * Scale down the μServices
   #+BEGIN_SRC bash
     for deployment in $(kc --context stg --namespace app get deployments -o name); do
