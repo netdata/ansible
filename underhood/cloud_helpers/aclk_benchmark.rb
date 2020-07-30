@@ -9,6 +9,21 @@ require 'optparse'
 require 'colorize'
 require 'hexdump'
 
+require 'net/http'
+
+def get_chart_list()
+  STDERR.puts "Getting Chart List From Agent".green
+  url = 'http://127.0.0.1:19999/api/v1/charts'
+  uri = URI(url)
+  response = Net::HTTP.get(uri)
+  payload_charts = JSON.parse(response, symbolize_names: true)
+  $chart_list = []
+  payload_charts[:charts].each do |key, chart|
+    $chart_list.push key
+  end
+  STDERR.puts "Done got #{$chart_list.size} charts".green
+end
+
 $agent_id = 'afb69b30-cb20-11ea-bb71-3085a98d4bee'
 $total_queries = 10000
 
