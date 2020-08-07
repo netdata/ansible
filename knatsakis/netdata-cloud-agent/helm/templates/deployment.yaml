@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{ .Release.Name }}'
+  labels:
+    {{- include "labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas | int }}
+  selector:
+    matchLabels:
+      {{- include "matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "matchLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: '{{ .Release.Name }}'
+          image: {{ .Values.image }}
+          resources:
+            requests:
+              cpu: 125m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          env:
+            - name: CLAIM_TOKEN
+              value: {{ .Values.claim_token }}
+            - name: CLAIM_ROOM
+              value: {{ .Values.claim_room }}
+            - name: ACLK_URL
+              value: {{ .Values.aclk_url }}
+          securityContext:
+            capabilities:
+              add:
+                - SYS_PTRACE

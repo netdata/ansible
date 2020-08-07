@@ -1,5 +1,0 @@
-replicas: 1
-claim:
-  token:
-  room:
-aclkURL: https://staging.netdata.cloud

@@ -1,0 +1,101 @@
+* N.B.: `TRUNCATE TABLE` does not work well with the CDC: https://github.com/cockroachdb/cockroach/issues/51639#issuecomment-662431448
+
+* Scale down the μServices
+  #+BEGIN_SRC bash
+    for deployment in $(kc --context stg --namespace app get deployments -o name); do
+        kc --context stg --namespace app scale --replicas=0 $deployment
+    done
+  #+END_SRC
+
+
+* CockroachDB
+  #+BEGIN_SRC bash
+    DATABASES=$(echo 'SHOW DATABASES;' | kc --context stg --namespace infra exec -i crdb-cockroachdb-0 -- ./cockroach sql --insecure --format raw | grep -v '^#')
+
+    for DATABASE in ${DATABASES}; do
+        [[ $DATABASE == postgres ]] && continue
+        [[ $DATABASE == system ]] && continue
+
+        TABLES=$(echo 'SHOW TABLES;' | kc --context stg --namespace infra exec -i crdb-cockroachdb-0 -- ./cockroach sql --insecure --format raw --database "${DATABASE}" | grep -v '^#')
+
+        for TABLE in ${TABLES}; do
+            [[ $TABLE == schema_lock ]] && continue
+            [[ $TABLE == schema_migrations ]] && continue
+
+            echo "TRUNCATE TABLE ${TABLE} CASCADE;" | kc --context stg --namespace infra exec -i crdb-cockroachdb-0 -- ./cockroach sql --insecure --format raw --database "${DATABASE}" --echo-sql
+        done
+    done
+  #+END_SRC
+* MongoDB
+  #+BEGIN_SRC bash
+    DATABASES=$(kc --context stg --namespace mongodb exec -i mongodb-sharded-shard0-data-0 --container mongodb -- /bin/bash -c $'/opt/bitnami/mongodb/bin/mongo --username root --password "$(cat /bitnami/mongodb/secrets/mongodb-root-password)" --quiet --eval "db.adminCommand(\'listDatabases\').databases"' | jq -r 'map(.name) | .[]')
+
+    for DATABASE in ${DATABASES}; do
+        [[ $DATABASE == admin ]] && continue
+        [[ $DATABASE == config ]] && continue
+        [[ $DATABASE == local ]] && continue
+
+        COLLECTIONS=$(kc --context stg --namespace mongodb exec -i mongodb-sharded-shard0-data-0 --container mongodb -- /bin/bash -c '/opt/bitnami/mongodb/bin/mongo --username root --password "$(cat /bitnami/mongodb/secrets/mongodb-root-password)" --authenticationDatabase admin --quiet --eval "db.getCollectionNames()" '"${DATABASE}" | jq -r '.[]')
+
+        for COLLECTION in ${COLLECTIONS}; do
+            [[ $COLLECTION == "schema_migrations" ]] && continue
+
+            echo Truncating $DATABASE.$COLLECTION
+            kc --context stg --namespace mongodb exec -i mongodb-sharded-shard0-data-0 --container mongodb -- /bin/bash -c '/opt/bitnami/mongodb/bin/mongo --username root --password "$(cat /bitnami/mongodb/secrets/mongodb-root-password)" --authenticationDatabase admin --quiet --eval "db.'"${COLLECTION}"'.remove({})" '"${DATABASE}"
+        done
+    done
+  #+END_SRC
+* Pulsar
+  #+BEGIN_SRC bash
+    helm --kube-context stg --namespace pulsar uninstall pulsar
+
+    PVCS=$(kc --context stg --namespace pulsar get persistentVolumeClaims -o name)
+    for PVC in ${PVCS}; do
+        kc --context stg --namespace pulsar delete "${PVC}"
+    done
+
+    PVS=$(kc --context stg --namespace pulsar get persistentVolume -o json | jq -r '.items | .[] | select(.spec.claimRef.namespace == "pulsar") | select(.status.phase == "Released") | .metadata.name')
+    for PV in ${PVS}; do
+        kc --context stg delete persistentVolume ${PV}
+    done
+  #+END_SRC
+* Redis
+  #+BEGIN_SRC bash
+    helm --kube-context stg --namespace infra uninstall redis
+  #+END_SRC
+* Redis (CDC)
+  #+BEGIN_SRC bash
+    helm --kube-context stg --namespace infra uninstall redis-cdc-streamer
+
+    PVCS=$(kc --context stg --namespace infra get persistentVolumeClaims -o name | grep redis-cdc-streamer)
+    for PVC in ${PVCS}; do
+        kc --context stg --namespace infra delete "${PVC}"
+    done
+
+    PVS=$(kc --context stg --namespace infra get persistentVolume -o json | jq -r '.items | .[] | select(.spec.claimRef.namespace == "infra") | select(.spec.claimRef.name | test("redis-cdc-streamer")) | select(.status.phase == "Released") | .metadata.name')
+    for PV in ${PVS}; do
+        kc --context stg delete persistentVolume ${PV}
+    done
+  #+END_SRC
+* VerneMQ
+  #+BEGIN_SRC bash
+    helm --kube-context stg --namespace infra uninstall vernemq
+
+    PVCS=$(kc --context stg --namespace infra get persistentVolumeClaims -o name | grep vernemq)
+    for PVC in ${PVCS}; do
+        kc --context stg --namespace infra delete "${PVC}"
+    done
+
+    PVS=$(kc --context stg --namespace infra get persistentVolume -o json | jq -r '.items | .[] | select(.spec.claimRef.namespace == "infra") | select(.spec.claimRef.name | test("vernemq")) | select(.status.phase == "Released") | .metadata.name')
+    for PV in ${PVS}; do
+        kc --context stg delete persistentVolume ${PV}
+    done
+  #+END_SRC
+
+
+* Scale up the μServices
+  #+BEGIN_SRC bash
+    for deployment in $(kc --context stg --namespace app get deployments -o name); do
+        kc --context stg --namespace app scale --replicas=1 $deployment
+    done
+  #+END_SRC
