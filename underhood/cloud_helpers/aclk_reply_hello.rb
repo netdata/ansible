@@ -6,6 +6,8 @@ require 'json'
 require 'colorize'
 
 $verbose = false
+$mqtt_host = '127.0.0.1'
+$mqtt_port = 1883
 
 def usage
     STDERR.puts "Usage: \"aclk_reply_hello.rb [min_aclk_version] [max_aclk_version]\""
@@ -32,8 +34,14 @@ if $min_ver > $max_ver
     exit 2
 end
 
-@client = MQTT::Client.connect('127.0.0.1', 1883)
+begin
+  @client = MQTT::Client.connect($mqtt_host, $mqtt_port)
+rescue Errno::ECONNREFUSED => e
+  STDERR.puts "Connection to MQTT broker @ #{$mqtt_host}:#{$mqtt_port} failed.\nYou must first start MQTT broker before running this script.".red
+  exit 4
+end
 STDERR.puts "Listening for \"hello\" message and replying with min, max = #{$min_ver}, #{$max_ver}".green
+
 @client.subscribe("/agent/+/outbound/#")
 begin
   @client.get() do |topic, message|
