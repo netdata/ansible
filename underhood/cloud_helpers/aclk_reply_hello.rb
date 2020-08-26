@@ -5,6 +5,8 @@ require 'mqtt'
 require 'json'
 require 'colorize'
 
+$verbose = false
+
 def usage
     STDERR.puts "Usage: \"aclk_reply_hello.rb [min_aclk_version] [max_aclk_version]\""
 end
@@ -39,12 +41,14 @@ begin
     if json[:type] == "hello"
       reply_topic = "/agent/#{topic.split('/')[2]}/inbound/cmd"
       msg = "{\"type\":\"version\",\"version\":1,\"min-version\":#{$min_ver},\"max-version\":#{$max_ver}}"
-      STDERR.puts "Got hello message replying to \"#{reply_topic}\"".yellow
-      STDERR.puts "Sending as reply:".yellow
+      STDERR.puts "Got \"hello\" message from agent with min=#{json[:"min-version"]}, max=#{json[:"max-version"]}".yellow
+      STDERR.puts "Sending to \"#{reply_topic}\" reply:".yellow
       STDERR.puts JSON.pretty_generate(JSON.parse(msg))
       @client.publish(reply_topic, msg)
+    elsif json[:type] == 'connect'
+      STDERR.puts "Got \"connect\" from agent with version #{json[:version]}".yellow
     else
-      STDERR.puts "Got msg type \"#{json[:type]}\" ignoring."
+      puts "Got msg type \"#{json[:type]}\" ignoring." if $verbose
     end
   end
 rescue Interrupt => e
