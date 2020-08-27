@@ -48,7 +48,7 @@ begin
     json = JSON.parse(message, symbolize_names: true)
     if json[:type] == "hello"
       reply_topic = "/agent/#{topic.split('/')[2]}/inbound/cmd"
-      msg = "{\"type\":\"version\",\"version\":1,\"min-version\":#{$min_ver},\"max-version\":#{$max_ver}}"
+      msg = "{\"type\":\"version\",\"version\":#{json[:version]},\"min-version\":#{$min_ver},\"max-version\":#{$max_ver}}"
       STDERR.puts "Got \"hello\" message from agent with min=#{json[:"min-version"]}, max=#{json[:"max-version"]}".yellow
       STDERR.puts "Sending to \"#{reply_topic}\" reply:".yellow
       STDERR.puts JSON.pretty_generate(JSON.parse(msg))
