@@ -57,7 +57,12 @@ STDERR.puts "Will #{"NOT (default) " if !$send_v2_request}send v2 (compression) 
 @client.subscribe("/agent/+/outbound/#")
 begin
   @client.get() do |topic, message|
-    json = JSON.parse(message, symbolize_names: true)
+    begin
+      json = JSON.parse(message, symbolize_names: true)
+    rescue
+      STDERR.puts "This message topic \"#{topic}\" could not be parsed as valid JSON:".red
+      STDERR.puts message.red
+    end
     if json[:type] == "hello"
       reply_topic = "/agent/#{topic.split('/')[2]}/inbound/cmd"
       msg = "{\"type\":\"version\",\"version\":#{json[:version]},\"min-version\":#{$min_ver},\"max-version\":#{$max_ver}}"
@@ -66,6 +71,8 @@ begin
       STDERR.puts JSON.pretty_generate(JSON.parse(msg))
       @client.publish(reply_topic, msg)
       STDERR.puts "Wait for agent \"connect\" message. It might take some time due to popcorning etc.".green
+    elsif json[:type] == 'child_disconnect'
+      STDERR.puts JSON.pretty_generate(json)
     elsif json[:type] == 'connect'
       STDERR.puts "Got \"connect\" from agent with version #{json[:version]}".yellow
       if $send_v2_request
