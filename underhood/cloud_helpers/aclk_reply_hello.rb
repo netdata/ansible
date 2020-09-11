@@ -71,10 +71,11 @@ begin
       STDERR.puts JSON.pretty_generate(JSON.parse(msg))
       @client.publish(reply_topic, msg)
       STDERR.puts "Wait for agent \"connect\" message. It might take some time due to popcorning etc.".green
-    elsif json[:type] == 'child_disconnect'
+    elsif json[:type] == 'child_disconnect'|| json[:type] == 'child_connect'
+      STDERR.puts "Got \"#{json[:type]}\" message from agent".yellow
       STDERR.puts JSON.pretty_generate(json)
     elsif json[:type] == 'connect'
-      STDERR.puts "Got \"connect\" from agent with version #{json[:version]}".yellow
+      STDERR.puts "Got \"connect\" from agent with version #{json[:version]} uid \"#{json[:payload][:info][:uid]}\"".yellow
       if $send_v2_request
         if json[:version] >= 2 && $send_v2_request
           STDERR.puts "Sending V2 test query.".green
