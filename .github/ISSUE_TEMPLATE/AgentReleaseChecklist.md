@@ -33,6 +33,8 @@ about: Checklist for releasing the Netdata Agent
 - [ ] Finalize the draft release on GitHub:
 - [ ] Update Netdata Helm chart increasing the chart's version and updating all occurrences of the app version in addition to any chart changes that may be required due to new configuration or other changes in the new release for the agent.
 - [ ] Send a pull request to Digital Ocean Marketplace repository with the update to chart and app version for the agent.
+- [ ] Update demosites
+- [ ] Update registries and verify (To verify visit: https://registry.my-netdata.io/#menu_netdata_submenu_registry)
 
 ### 2020-06-18 01:00 UTC:
 - [ ] 24 hours after the release, re-enable nightly agent builds by adding (Defining Environment Variables in Repository Settings) an environment variable with the following details:
