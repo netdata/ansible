@@ -34,7 +34,7 @@ $msg_count = 0
 $msg_filtered_count = 0
 $msg_malformed_count = 0
 
-if ARGV.size
+if ARGV.size > 0
     print_help if ARGV[0] == "-h" || ARGV[0] == "--help"
     $filter = ARGV
 else
