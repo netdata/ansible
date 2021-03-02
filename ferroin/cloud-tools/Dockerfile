@@ -1,16 +1,16 @@
-ARG docker_tag=19.03.11
-ARG helm_tag=2.16.9
-ARG terraform_tag=0.12.21
+ARG docker_tag=20.10.4
+ARG helm_tag=3.5.2
+ARG terraform_tag=0.14.7
 
 FROM alpine/helm:${helm_tag} as helm-source
 FROM docker:${docker_tag} as static-docker-source
 FROM hashicorp/terraform:${terraform_tag} as terraform-source
 
 FROM debian:buster
-ARG CLOUD_SDK_VERSION=298.0.0
+ARG CLOUD_SDK_VERSION=329.0.0
 ENV CLOUD_SDK_VERSION=$CLOUD_SDK_VERSION
 ENV CLOUDSDK_PYTHON=python3
-ARG K9S_VERSION=v0.20.5
+ARG K9S_VERSION=v0.24.2
 ENV K9S_VERSION=$K9S_VERSION
 
 ARG INSTALL_COMPONENTS
