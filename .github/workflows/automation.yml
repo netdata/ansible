@@ -21,7 +21,7 @@ jobs:
           .github/scripts/did-nightlies-run.sh
       - name: Send Slack Notification
         if: failure()
-        uses: rtCamp/action-slack-notify@v2.0.0
+        uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_TITLE: '@here Nightlies *NOT* published in last 48hrs'
           SLACK_MESSAGE: |

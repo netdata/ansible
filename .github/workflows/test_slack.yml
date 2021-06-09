@@ -15,7 +15,7 @@ jobs:
           /bin/true
       - name: Send Slack Notification
         if: success()
-        uses: rtCamp/action-slack-notify@v2.0.0
+        uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_TITLE: 'TEst Success'
           SLACK_MESSAGE: 'Test Success :white_check_mark:'
@@ -34,7 +34,7 @@ jobs:
           /bin/false
       - name: Send Slack Notification
         if: failure()
-        uses: rtCamp/action-slack-notify@v2.0.0
+        uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_TITLE: 'Test Failure'
           SLACK_MESSAGE: 'Test Failure :red_circle:'
