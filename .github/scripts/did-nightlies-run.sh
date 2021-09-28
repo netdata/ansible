@@ -32,7 +32,7 @@ else
   printf "OK\n"
 fi
 
-for version in bionic xenial focal; do
+for version in bionic focal; do
   printf "Checking last published PackageCloud Ubuntu %s package ... " "${version}"
   last_modified="$(curl -sSL https://packagecloud.io/netdata/netdata-edge/ubuntu/dists/"${version}"/Release | grep -o -E '^Date\:.*' | sed -e 's/Date: //')"
   last_modified_since="$(($(date +%s) - $(date -d "${last_modified}" +%s)))"
@@ -49,7 +49,7 @@ for version in bionic xenial focal; do
   fi
 done
 
-for version in stretch buster; do
+for version in buster bullseye; do
   printf "Checking last published PackageCloud Debian %s package ... " "${version}"
   last_modified="$(curl -sSL https://packagecloud.io/netdata/netdata-edge/debian/dists/"${version}"/Release | grep -o -E '^Date\:.*' | sed -e 's/Date: //')"
   last_modified_since="$(($(date +%s) - $(date -d "${last_modified}" +%s)))"
