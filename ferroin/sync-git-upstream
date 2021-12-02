@@ -1,0 +1,85 @@
+#!/bin/sh
+
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo 'Not in a git repository.'
+    exit 1
+fi
+
+if ! git ls-remote --exit-code upstream > /dev/null 2>&1; then
+    echo 'No upstream remote found.'
+    exit 1
+fi
+
+echo '>>> Determining main branch name.'
+main_branch='main'
+
+if git show-ref --verify --quiet refs/heads/master; then
+    main_branch='master'
+fi
+
+echo '>>> Checking out main branch.'
+git checkout "${main_branch}" || exit 1
+
+echo '>>> Verifying local branches sourced from upstream refs.'
+upstream_branches="$(git ls-remote --heads origin  | sed 's?.*refs/heads/??' | sort)"
+
+if [ -z "${upstream_branches}" ]; then
+    echo 'Failed to list upstream branches.'
+    exit 1
+fi
+
+echo '>>> Fetching upstream refs.'
+git fetch -pPt upstream || exit 1
+
+echo '>>> Checking for removed upstream branches.'
+new_upstream_branches="$(git ls-remote --heads upstream  | sed 's?.*refs/heads/??' | sort)"
+
+if [ -z "${new_upstream_branches}" ]; then
+    echo 'Failed to list upstream branches.'
+    exit 1
+fi
+
+removed_branches="$(echo "${upstream_branches}" | grep -vE "$(echo "${new_upstream_branches}" | tr "\r" "|")")"
+
+for branch in ${removed_branches}; do
+    if git show-ref --verify --quiet "refs/heads/${branch}" && \
+       [ "$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")" = "upstream/${branch}" ]; then
+        echo ">>> Deleting local copy of removed upstream branch: ${branch}"
+        git branch -D "${branch}"
+    fi
+done
+
+echo '>>> Updating main branch.'
+git pull --ff-only upstream "${main_branch}" || exit 1
+
+echo '>>> Pushing main branch to origin.'
+git push origin "${main_branch}" || exit 1
+
+echo '>>> Verifying local branches sourced from origin refs.'
+origin_branches="$(git ls-remote --heads origin  | sed 's?.*refs/heads/??' | sort)"
+
+if [ -z "${origin_branches}" ]; then
+    echo 'Failed to list origin branches.'
+    exit 1
+fi
+
+echo '>>> Fetching origin refs.'
+git fetch -p origin || exit 1
+
+echo '>>> Checking for removed origin branches.'
+new_origin_branches="$(git ls-remote --heads origin  | sed 's?.*refs/heads/??' | sort)"
+
+if [ -z "${new_origin_branches}" ]; then
+    echo 'Failed to list origin branches.'
+    exit 1
+fi
+
+removed_branches="$(echo "${origin_branches}" | grep -vE "$(echo "${new_origin_branches}" | tr "\r" "|")")"
+
+for branch in ${removed_branches}; do
+    if git show-ref --verify --quiet "refs/heads/${branch}" && \
+       [ "$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)")" = "origin/${branch}" ]; then
+        echo ">>> Deleting local copy of removed origin branch: ${branch}"
+        git branch -D "${branch}"
+    fi
+done
