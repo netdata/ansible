@@ -18,7 +18,7 @@ Titles reflect timing relative to release day in business days.
 - [ ] Confirm with the agent team that any blockers for the release are on schedule
 
 ### T minus 1 day:
-- [ ] Confirm with the agent team that any blockers for the release are on schedule
+- [ ] Confirm with the agent team that all blockers for the release have been resolved
 - [ ] Confirm with the documentation team that the relase notes are ready
 
 ### Release day:
@@ -29,10 +29,10 @@ Titles reflect timing relative to release day in business days.
 - [ ] Verify that the Docker build CI workflow has completed and that the `latest` and `stable` tags have been updated on Docker Hub
 - [ ] Verify that the package build CI workflow has correctly published packages to PackageCloud
 - [ ] Verify that the main build CI workflow has finished completely and created a draft release with the correct artifacts attached
-- [ ] Notify the team, on Slack channel #general, that the release is complete and committing/merging to the master branch is resumed
-- [ ] Create/Recreate `develop` branch off of `master` and inform Agent Team to push/target `develop` until we're sure we will not have a hotfix
 - [ ] Copy the release notes from the issue in the marketing repo to the draft release
 - [ ] Publish the draft release
+- [ ] Notify the team, on Slack channel #general, that the release is complete and committing/merging to the master branch is resumed
+- [ ] Create/Recreate `develop` branch off of `master` and inform Agent Team to push/target `develop` until we're sure we will not have a hotfix
 - [ ] Verify that a PR updating the Helm chart was automatically created
 
 ### T plus 1 day:
