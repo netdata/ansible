@@ -1,0 +1,34 @@
+Unattended-Upgrade::Origins-Pattern {
+        // Codename based matching:
+        // This will follow the migration of a release through different
+        // archives (e.g. from testing to stable and later oldstable).
+        // Software will be the latest available for the named release,
+        // but the Debian release itself will not be automatically upgraded.
+        "origin=Debian,codename=${distro_codename}-updates";
+        "origin=Debian,codename=${distro_codename},label=Debian";
+        "origin=Debian,codename=${distro_codename},label=Debian-Security";
+        "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+
+};
+
+Unattended-Upgrade::Package-Blacklist {
+    // The following matches all packages starting with linux-
+
+    // Use $ to explicitely define the end of a package name. Without
+    // the $, "libc6" would match all of them.
+
+    // Special characters need escaping
+
+    // The following matches packages like xen-system-amd64, xen-utils-4.1,
+    // xenstore-utils and libxenstore3.0
+
+    // For more information about Python regular expressions, see
+    // https://docs.python.org/3/howto/regex.html
+};
+
+Unattended-Upgrade::Mail "{{ Mail }}";
+Unattended-Upgrade::MailReport "{{ MailReport }}";
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "{{ RemoveUnusedKernelPackages }}";
+Unattended-Upgrade::Remove-New-Unused-Dependencies "{{ RemoveNewUnusedDependencies }}";
+Unattended-Upgrade::Remove-Unused-Dependencies "{{ RemoveUnusedDependencies }}";
+Unattended-Upgrade::Automatic-Reboot "{{ AutomaticReboot }}";

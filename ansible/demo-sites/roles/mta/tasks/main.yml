@@ -1,0 +1,4 @@
+---
+
+- include_tasks: exim.yml
+  when: mta == "exim"

@@ -1,0 +1,8 @@
+- hosts: all
+  remote_user: root
+  gather_facts: True
+  roles:
+      - role: common
+      - role: unattended-upgrades
+      - role: dns
+      - role: mta

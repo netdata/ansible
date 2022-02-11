@@ -1,0 +1,7 @@
+---
+
+- name: Ensure unbound is installed.
+  package: name=unbound state=present
+
+- name: Ensure unbound is started and enabled on boot.
+  service: name=unbound state=started enabled=yes

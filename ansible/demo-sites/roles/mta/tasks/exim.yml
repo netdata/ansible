@@ -1,0 +1,31 @@
+---
+
+- name: Ensure Exim MTA is installed.
+  package: name=exim4-daemon-heavy state=present
+
+- name: Generate an OpenSSL private key
+  community.crypto.openssl_privatekey:
+    path: "/etc/ssl/exim.pem"
+    type: Ed25519
+    group: Debian-exim
+    owner: root
+    mode: 0640
+    backup: yes
+
+- name: Insert/Update mail aliases in /etc/aliases
+  blockinfile:
+    path: /etc/aliases
+    block: |
+      root: admin@netdata.cloud
+      costa: admin@netdata.cloud
+
+- name: Copy Exim configuration in place.
+  template:
+    src: exim4.conf.j2
+    dest: /etc/exim4/exim4.conf
+    mode: 0644
+    validate: exim -C %s -bV
+  notify: restart exim4
+
+- name: Ensure Exim4 is started and enabled on boot.
+  service: name=exim4 state=started enabled=yes

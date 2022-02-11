@@ -1,0 +1,6 @@
+Mail: "admin@netdata.cloud"
+MailReport: "on-change"
+RemoveUnusedKernelPackages: "true"
+RemoveNewUnusedDependencies: "true"
+RemoveUnusedDependencies: "true"
+AutomaticReboot: "true"

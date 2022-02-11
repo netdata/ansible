@@ -1,0 +1,13 @@
+---
+
+- name: Install some essential packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  loop:
+    - zsh
+    - tmux
+    - vim
+    - debian-goodies
+    - bsd-mailx
+    - powermgmt-base
