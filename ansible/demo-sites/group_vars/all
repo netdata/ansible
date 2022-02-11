@@ -1,4 +1,4 @@
-Mail: "admin@netdata.cloud"
+Mail: "agent-sre@netdata.cloud"
 MailReport: "on-change"
 RemoveUnusedKernelPackages: "true"
 RemoveNewUnusedDependencies: "true"
