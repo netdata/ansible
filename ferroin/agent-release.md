@@ -65,7 +65,7 @@ end replaced with a link to the release checklist issue for this release:
 
 ```
 @here We are now entering a _hard_ code freeze for the netdata/netdata repository in preparation for the release of
-<version>. During this time _nothing_ may be merged to `master` in netdata/netdata. Annother announcemne twill be
+<version>. During this time _nothing_ may be merged to `master` in netdata/netdata. Annother announcement will be
 made here on #general when the hard code freeze is lifted. To follow along with the release progress, please see:
 https://github.com/netdata/internal/issues/65
 ```
