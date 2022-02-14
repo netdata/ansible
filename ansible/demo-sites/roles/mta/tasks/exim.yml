@@ -12,10 +12,12 @@
     mode: 0640
     backup: yes
 
+# Probably not the best place for aliases but I do not touch MTA on London site and do not need for Postfix specific task 
 - name: Insert/Update mail aliases in /etc/aliases
   blockinfile:
     path: /etc/aliases
     block: |
+      netdata: admin@netdata.cloud
       root: admin@netdata.cloud
       costa: admin@netdata.cloud
 
