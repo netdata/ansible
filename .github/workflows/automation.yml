@@ -5,8 +5,7 @@
 name: Automation
 on:
   schedule:
-    - cron: '0 4 * * *'
-  pull_request:
+    - cron: '5 4 * * *'
 jobs:
   did-nightlies-run:
     name: Did Nightlies Run
@@ -23,7 +22,7 @@ jobs:
         if: failure()
         uses: rtCamp/action-slack-notify@v2.2.0
         env:
-          SLACK_TITLE: '@here Nightlies *NOT* published in last 48hrs'
+          SLACK_TITLE: '@agent-sre Nightlies *NOT* published in last 48hrs'
           SLACK_MESSAGE: |
             The nightlies have not successfully published in the last 48hrs.
             Please check the Travis nightly jobs (marked with `CRON`).
@@ -33,19 +32,133 @@ jobs:
           SLACK_USERNAME: netdatabot
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-  update-website-kickstart-scripts:
-    name: Update Website kickstart* scripts
+  check-kickstart:
+    name: Verify that kickstart script is deployed correctly
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup SSH Agent
-        uses: webfactory/ssh-agent@v0.5.2
-        with:
-          ssh-private-key: ${{ secrets.NETDATA_RSA }}
-      - name: Append Known Hosts
+      - name: Fetch master kickstart script
+        id: github
         run: |
-          echo "[138.68.182.52]:2222 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNflFMXwOua2Np1Fywr12HJTpolxxoCIdIC6pArqj1xaIXx6rk76ETzYb23wah2/91r4DRcafPXY5blzHRIZtYo=" >> $HOME/.ssh/known_hosts
-      - name: Run .github/scripts/update-website-kickstart-scripts.sh
+          wget -Sv -O kickstart-master.sh -t 6 -T 60 -w 300 -N --no-dns-cache --retry-connrefused \
+              https://raw.githubusercontent.com/netdata/netdata/master/packaging/installer/kickstart.sh || exit 1
+      - name: Notify about failure to retrieve script
+        if: ${{ steps.github.outcome }} != 'success'
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: 'danger'
+          SLACK_FOOTER: ''
+          SLACK_ICON_EMOJI: ':github-actions:'
+          SLACK_TITLE: '@agent-sre Failed to retrieve upstream kickstart script for verification.'
+          SLACK_USERNAME: 'GitHub Actions'
+          SLACK_MESSAGE: >-
+            While attempting to verify deployment of the kickstart script, the master copy at https://github.com/netdata/netdata/blob/master/packaging/installer/kickstart.sh could not be retrieved.
+            Most likely, this is a transient netowrk error.
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Fetch deployed kickstart script
+        id: deployed
         run: |
-          .github/scripts/update-website-kickstart-scripts.sh
+          wget -Sv -O kickstart-deployed.sh -t 6 -T 60 -w 300 -N --no-dns-cache --retry-connrefused \
+              https://my-netdata.io/kickstart.sh || exit 1
+      - name: Notify about failure to retrieve script
+        if: ${{ steps.deployed.outcome }} != 'success'
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: 'danger'
+          SLACK_FOOTER: ''
+          SLACK_ICON_EMOJI: ':github-actions:'
+          SLACK_TITLE: '@agent-sre Failed to retrieve deployed kickstart script for verification.'
+          SLACK_USERNAME: 'GitHub Actions'
+          SLACK_MESSAGE: >-
+            While attempting to verify deployment of the kickstart script, the copy deployed at https://my-netdata.io/kickstart.sh could not be retrieved.
+            Most likely, this is a transient netowrk error, but it could mean that the something is wrong with the London demo site.
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Compare retrieved scripts
+        id: compare
+        run: |
+          diff -asU3 kickstart-master.sh kickstart-deployed.sh || exit 1
+      - name: Notify about script mismatch
+        if: ${{ steps.compare.outcome }} != 'success'
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: 'danger'
+          SLACK_FOOTER: ''
+          SLACK_ICON_EMOJI: ':github-actions:'
+          SLACK_TITLE: '@agent-sre Kickstart script is not deployed correctly.'
+          SLACK_USERNAME: 'GitHub Actions'
+          SLACK_MESSAGE: >-
+            The kickstart script deployed at https://my-netdata.io/kickstart.sh does not match the one located at https://github.com/netdata/netdata/blob/master/packaging/installer/kickstart.sh.
+            Most likely, something is wrong with the automated upload cronjob.
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  check-kickstart-checksum:
+    name: Verify that the checksum for the kickstart script in netdata/learn matches the deployed copy of the script.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch documentation
+        id: docs
+        run: |
+          wget -Sv -O kickstart.md -t 6 -T 60 -w 300 -N --no-dns-cache --retry-connrefused \
+              https://raw.githubusercontent.com/netdata/learn/master/docs/agent/packaging/installer/methods/kickstart.md || exit 1
+      - name: Notify about failure to retrieve documentation
+        if: ${{ steps.docs.outcome }} != 'success'
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: 'danger'
+          SLACK_FOOTER: ''
+          SLACK_ICON_EMOJI: ':github-actions:'
+          SLACK_TITLE: '@agent-sre Failed to retrieve documentation file for kickstart checksum verification.'
+          SLACK_USERNAME: 'GitHub Actions'
+          SLACK_MESSAGE: >-
+            While attempting to verify the checksum of the deployed kickstart script, https://raw.githubusercontent.com/netdata/learn/master/docs/agent/packaging/installer/methods/kickstart.md could not be retrieved.
+            Most likely, this is a transient netowrk error.
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Fetch deployed kickstart script
+        id: deployed
+        run: |
+          wget -Sv -O kickstart.sh -t 6 -T 60 -w 300 -N --no-dns-cache --retry-connrefused \
+              https://my-netdata.io/kickstart.sh || exit 1
+      - name: Notify about failure to retrieve script
+        if: ${{ steps.deployed.outcome }} != 'success'
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: 'warning'
+          SLACK_FOOTER: ''
+          SLACK_ICON_EMOJI: ':github-actions:'
+          SLACK_TITLE: '@agent-sre Failed to retrieve deployed kickstart script for checksum verification.'
+          SLACK_USERNAME: 'GitHub Actions'
+          SLACK_MESSAGE: >-
+            While attempting to verify the checksum of the deployed kickstart script, https://my-netdata.io/kickstart.sh could not be retrieved.
+            Most likely, this is a transient netowrk error, but it could mean that the something is wrong with the London demo site.
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Verify checksum
+        id: verify
+        run: |
+          kickstart_checksum="$(md5sum ./kickstart.sh | cut -f 1 -d ' ')"
+          docs_checksum="$(grep -E '".*" = ".*kickstart\.sh.*md5sum.*"' kickstart.md | cut -d '=' -f 1 | cut -d '"' -f 2)"
+
+          case "$(echo "${docs_checksum}" | wc -l)" in
+            0)
+              echo "ERROR: Could not find a matching checksum line in https://github.com/netdata/learn/blob/master/docs/agent/packaging/installer/methods/kickstart.md."
+              exit 1
+            1)
+              if [ "${kickstart_checksum}" != "${docs_checksum}" ]; then
+                echo "ERROR: The checksum of the deployed kickstart script does not match what is in the documentation."
+                exit 1
+              fi
+            *)
+              echo "ERROR: Found more than one matching checksum line in https://github.com/netdata/learn/blob/master/docs/agent/packaging/installer/methods/kickstart.md."
+              exit 1
+          esac
+      - name: Notify about script mismatch
+        if: ${{ steps.compare.outcome }} != 'success'
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: 'danger'
+          SLACK_FOOTER: ''
+          SLACK_ICON_EMOJI: ':github-actions:'
+          SLACK_TITLE: '@agent-sre The checksum of the deployed kickstart script does not match the documentation.'
+          SLACK_USERNAME: 'GitHub Actions'
+          SLACK_MESSAGE: >-
+            The checksum of the kickstart script deployed at https://my-netdata.io/kickstart.sh does not match the checksum listed in https://github.com/netdata/learn/blob/master/docs/agent/packaging/installer/methods/kickstart.md.
+            This probably means that there is a pending pull request to merge the updated documentation into the netdata/learn repository.
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
