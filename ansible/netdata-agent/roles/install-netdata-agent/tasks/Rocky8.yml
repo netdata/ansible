@@ -1,0 +1,13 @@
+---
+
+- package:
+    name: "{{ netdata_agent_package_name }}"
+    state: latest
+    update_cache: True
+    disable_gpg_check: True
+
+- name: Start "{{ netdata_agent_service_name }}" service
+  systemd:
+    name: "{{ netdata_agent_service_name }}"
+    state: started
+    enabled: True

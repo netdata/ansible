@@ -1,0 +1,28 @@
+---
+
+- name: Install Netdata repo key.
+  apt_key:
+    url: https://packagecloud.io/netdata/netdata-repoconfig/gpgkey
+    state: present
+  become: True
+
+# I know this is extremely dumb solution but it works
+- name: Install Netdata repository configuration
+  apt:
+    deb: https://packagecloud.io/netdata/netdata/packages/debian/bullseye/netdata-repo_1-1_all.deb/download.deb
+  become: True
+
+    #- name: Install some essential packages
+    #  apt:
+    #    name: "{{ item }}"
+    #    update_cache: yes
+    #  loop:
+    #    - debian-archive-keyring
+    #    - apt-transport-https
+
+#- name: add Debian 11 Netdata repo
+#  apt_repository: 
+#  #repo: deb https://packagecloud.io/netdata/netdata/packages/debian/bullseye/netdata-repo_1-1_all.deb/download.deb bullseye main
+#    repo: deb https://packagecloud.io/netdata/netdata-repoconfig/packages/debian/bullseye/netdata-repo_1-1_all.deb/download.deb
+#    state: present
+#    update_cache: True

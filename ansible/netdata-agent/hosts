@@ -1,0 +1,15 @@
+---
+
+all:
+  hosts:
+    ubuntu:
+      ansible_host: 192.168.10.104
+    debian:
+      ansible_host: 192.168.10.106
+    centos7:
+      ansible_host: 192.168.10.108
+    rocky8:
+      ansible_host: 192.168.10.111
+      ansible_user: root
+  vars:
+    ansible_user: ikarpov

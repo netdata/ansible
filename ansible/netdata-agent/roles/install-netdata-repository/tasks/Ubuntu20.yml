@@ -1,0 +1,10 @@
+---
+
+- name: Install some essential packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  become: True
+  loop:
+    - debian-archive-keyring
+    - apt-transport-https

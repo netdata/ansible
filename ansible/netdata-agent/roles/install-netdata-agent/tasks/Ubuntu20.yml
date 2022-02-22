@@ -1,0 +1,11 @@
+---
+
+- package:
+    name: "{{ netdata_agent_package_name }}"
+    state: present
+
+- name: Start "{{ netdata_agent_service_name }}" service
+  systemd:
+    name: "{{ netdata_agent_service_name }}"
+    state: started
+    enabled: True

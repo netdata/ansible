@@ -1,0 +1,17 @@
+---
+
+- name: remove Netdata packages
+  dnf:
+    state: absent
+    name:
+      - netdata
+
+- name: Remove the remains
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /var/log/netdata
+    - /var/lib/netdata
+    - /var/cache/netdata
+    - /usr/libexec/netdata

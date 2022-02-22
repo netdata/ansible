@@ -1,0 +1,15 @@
+- hosts: all
+  remote_user: "{{ansible_user}}"
+  gather_facts: True
+
+  pre_tasks:
+    
+    - name: Add EPEL Repository for Centos/Rocky
+      package:
+        name: epel-release
+        state: latest
+      when: ansible_facts['os_family'] == 'RedHat'
+
+  roles:
+      - role: install-netdata-repository 
+      - role: install-netdata-agent
