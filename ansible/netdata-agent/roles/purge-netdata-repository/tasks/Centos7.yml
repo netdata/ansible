@@ -1,2 +1,7 @@
 ---
 
+- name: Remove Netdata configuration package
+  yum:
+    name: "{{netdata_repo_package}}"
+    state: absent
+

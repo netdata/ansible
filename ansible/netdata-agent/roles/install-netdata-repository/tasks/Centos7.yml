@@ -1,42 +1,27 @@
 ---
 
- - name: Install stable repo
-   yum_repository:
-     name: netdata-stable
-     description: Netdata YUM repo
-     #     baseurl: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/7/netdata-repo-1-1.noarch.rpm/download.rpm
-     baseurl: https://packagecloud.io/netdata/netdata/el/$releasever/$basearch
-     file: Netdata-Stable
+# I know this is extremely dumb solution but it works
+# The 'distro' variable is set in 'install-netdata-repository/defaults/main.yml' and is stable by default
+# You might want to override it in 'group_vars/' for example. Or in command line. Or somewhere else.
+#
+- name: Install Netdata stable repository configuration
+  yum:
+    name: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/7/netdata-repo-1-1.noarch.rpm/download.rpm
+    state: present
+  when: distro == 'stable'
 
- - name: Install edge repo
-   yum_repository:
-     name: netdata-edge
-     description: Netdata YUM repo
-     baseurl: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/7/netdata-repo-edge-1-1.noarch.rpm/download.rpm
-     file: Netdata-Edge
-     enabled: False
+- name: Import a key from a url
+  rpm_key:
+    state: present
+    key: https://packagecloud.io/netdata/netdata/gpgkey
 
-     #- name: Install stable repository PGP key
-     #  rpm_key:
-     #    state: present
-     #    key: https://packagecloud.io/netdata/netdata/gpgkey
-     #  when: distro == 'stable'
+- name: Install Netdata nightly repository configuration
+  yum:
+    name: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/7/netdata-repo-edge-1-1.noarch.rpm/download.rpm
+    state: present
+  when: distro == 'edge'
 
-     #- name: Install nightly repository PGP key
-     #  rpm_key:
-     #    state: present
-     #    key: https://packagecloud.io/netdata/netdata-edge/gpgkey
-     #  when: distro == 'edge'
-
-     ## I know this is extremely dumb solution but it works
-     #- name: Install Netdata stable repository configuration
-     #  yum:
-     #    name: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/7/netdata-repo-1-1.noarch.rpm/download.rpm
-     #    state: present
-     #  when: distro == 'stable'
-
-     #- name: Install Netdata nightly repository configuration
-     #  yum:
-     #    name: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/7/netdata-repo-edge-1-1.noarch.rpm/download.rpm
-     #    state: present
-     #  when: distro == 'edge'
+- name: Import a key from a url
+  rpm_key:
+    state: present
+    key: https://packagecloud.io/netdata/netdata-edge/gpgkey

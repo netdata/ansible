@@ -1,16 +1,17 @@
 ---
 
-- name: Install stable repo
-  yum_repository:
-    name: Netdata Stable
-    description: Netdata YUM/DNF repo
-    baseurl: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/8/netdata-repo-1-1.noarch.rpm/download.rpm
-    file: Netdata-Stable
+- name: remove Netdata packages
+  dnf:
+    state: absent
+    name:
+      - netdata
 
-- name: Install edge repo
-  yum_repository:
-    name: Netdata Edge
-    description: Netdata YUM/DNF repo
-    baseurl: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/8/netdata-repo-edge-1-1.noarch.rpm/download.rpm
-    file: Netdata-Edge
-    enabled: False
+- name: Remove the remains
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /var/log/netdata
+    - /var/lib/netdata
+    - /var/cache/netdata
+    - /usr/libexec/netdata
