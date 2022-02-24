@@ -4,7 +4,8 @@
   dnf:
     state: absent
     name:
-      - netdata
+      - "{{ netdata_repo_package }}"
+      - "{{ netdata_agent_package }}"
 
 - name: Remove the remains
   file:
