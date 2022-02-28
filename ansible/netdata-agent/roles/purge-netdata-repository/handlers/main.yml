@@ -1,2 +1,12 @@
 ---
 # handlers file for roles/purge-netdata-repository
+
+- name: yum-clean-metadata
+  command: yum clean metadata
+  args:
+    warn: no
+
+- name: dnf-clean-metadata
+  command: dnf clean metadata
+  args:
+    warn: no

@@ -6,6 +6,7 @@
     name:
       - "{{ netdata_repo_package }}"
       - "{{ netdata_agent_package_name }}"
+  notify: dnf-clean-metadata
 
 - name: Remove the remains
   file:

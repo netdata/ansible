@@ -4,4 +4,4 @@
   yum:
     name: "{{netdata_repo_package}}"
     state: absent
-
+  notify: yum-clean-metadata
