@@ -3,4 +3,5 @@
   become: True
 
   roles:
-      - role: purge-netdata-repository
+    - role: purge-netdata-repository
+    - role: purge-netdata-agent

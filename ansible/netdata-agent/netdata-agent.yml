@@ -5,7 +5,7 @@
 
   pre_tasks:
     
-    - name: Add EPEL Repository for Centos/Rocky
+    - name: Add EPEL repository for Centos/Rocky
       package:
         name: epel-release
         state: latest

@@ -1,0 +1,14 @@
+---
+
+#https://packagecloud.io/netdata/netdata-repoconfig/el/7/x86_64
+
+- hosts: centos7
+  gather_facts: True
+  become: True
+  tasks:
+
+    - name: Add repository
+      yum_repository:
+        name: netdata-repoconf
+        description: Netdata YUM repo
+        baseurl: https://packagecloud.io/netdata/netdata-repoconfig/el/7/x86_64

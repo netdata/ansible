@@ -3,8 +3,7 @@
 - name: remove Netdata packages
   yum:
     state: absent
-    name:
-      - netdata
+    name: netdata
 
 - name: Remove the remains
   file:

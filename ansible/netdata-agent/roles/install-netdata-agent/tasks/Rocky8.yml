@@ -5,6 +5,7 @@
     state: latest
     update_cache: True
     disable_gpg_check: True
+    disablerepo: "epel"
 
 - name: Start "{{ netdata_agent_service_name }}" service
   systemd:

@@ -5,6 +5,18 @@
     state: latest
     update_cache: True
     disable_gpg_check: True
+    disablerepo: "epel"
+
+- name: Ensures /etc/netdata dir exists
+  file: path=/etc/netdata state=directory
+
+- name: Writing configuration to /etc/netdata/netdata.conf
+  ansible.builtin.template:
+    src: netdata.conf.j2
+    dest: /etc/netdata/netdata.conf
+    owner: root
+    group: root
+    mode: '0644'
 
 - name: Start "{{ netdata_agent_service_name }}" service
   systemd:

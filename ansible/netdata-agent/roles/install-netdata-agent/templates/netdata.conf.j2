@@ -1,0 +1,16 @@
+[global]
+    run as user = {{agent_user}}
+
+    # the default database size - 1 hour
+    history = {{agent_history}}
+
+    # some defaults to run netdata with least priority
+    process scheduling policy = {{agent_policy}}
+    OOM score = {{oom_score}}
+
+[web]
+    web files owner = {{owner}}
+    web files group = {{group}}
+
+    # by default do not expose the netdata port
+    bind to = {{bind_to}}
