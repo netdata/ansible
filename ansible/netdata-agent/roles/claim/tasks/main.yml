@@ -1,4 +1,37 @@
 ---
 # tasks file for roles/claim
 
+- name: Get information about running agent
+  shell: netdatacli aclk-state json
+  register: agent_info
 
+- name: Parse netdatacli output
+  debug:
+    msg: "{{ agent_info.stdout | from_json | json_query('online') }}"
+
+- name: Search for claimed
+  debug:
+    msg: "{{ agent_info.stdout | from_json | json_query('\"agent-claimed\"') }}"
+
+- set_fact: 
+    is_online: "{{ agent_info.stdout | from_json | json_query('online') }}"
+
+- set_fact: 
+    is_claimed: "{{ agent_info.stdout | from_json | json_query('\"agent-claimed\"') }}"
+
+- name: Is claimed?
+  debug:
+    msg: "{{ is_claimed }}"
+
+- name: Claim the new node
+  block:
+    - name: Generate UUID
+      shell: uuidgen
+      register: uuid
+
+    - set_fact:
+        new_uuid: "{{ uuid.stdout }}"
+
+    - name: Claim the node
+      shell: netdata-claim.sh -token="{{ claim_token }}" -rooms="{{ claim_rooms }}" -url="{{ claim_url }}" -id="{{ new_uuid }}"
+  when: not is_claimed
