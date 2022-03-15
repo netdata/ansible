@@ -1,36 +1,62 @@
 ---
-# Runs various scheduled automation workflows:
-# - .github/scripts/did-nightlies-run.sh -- Whether we last successfully published nightlies
-# - .github/scripts/update-website-kickstart-scripts.sh
+# Assorted internal checks used to notify the Agent SRE team aobut various issues.
 name: Automation
 on:
   schedule:
-    - cron: '5 4 * * *'
+    - cron: '0 6 * * *'
+env:
+  THRESHOLD: 115200 # 32 hours, used as the threshold for a fresh nightly build (one day, plus the six scheduling offset on this workflow, plus a two hour buffer).
+  WGET_OPTS: "-Sv -t 6 -T 60 -w 300 -N --no-dns-cache --retry-connrefused"
 jobs:
-  did-nightlies-run:
-    name: Did Nightlies Run
+  check-nightly-commits: # Verify if it looks like a nightly build ran or not, and whether it should have or not.
+    name: Should Nightlies Have Run
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
+        id: checkout
         uses: actions/checkout@v3
-      - name: Run did-nightlies-run.sh
-        env:
-          DEBUG: "1"
+        with:
+          repository: netdata/netdata
+          fetch-depth: 0
+          path: netdata
+      - name: Check Commits
+        id: check-commits
         run: |
-          .github/scripts/did-nightlies-run.sh
-      - name: Send Slack Notification
-        if: failure()
-        uses: rtCamp/action-slack-notify@v2.2.0
+          cd netdata
+          NOW="$(date +%s)"
+          LAST_COMMIT="$(git rev-parse HEAD)"
+          LAST_VERSION_COMMIT="$(git rev-list -1 HEAD packaging/version)"
+          LAST_VERSION_COMMIT_TIME="$(git log -1 --format=%ct "${LAST_VERSION_COMMIT}")"
+
+          if [ "${LAST_COMMIT}" = "${LAST_VERSION_COMMIT}" ]; then
+            if grep -qE '.*-nightly' packaging/version; then
+              # Last commit was from a nightly build.
+              exit 0
+            else
+              # Last commit was from a release, a nightly should have run but did not.
+              exit 1
+            fi
+          elif [ "${LAST_VERSION_COMMIT_TIME}" -lt "$((NOW - THRESHOLD))" ]; then
+            # The last nightly build happened more than 32 hours ago.
+            # Given that the last commit was not a nightly build commit, this means that the build should have run but did not.
+            exit 1
+          else
+            # Last commit was not from a nightly build, but a nightly happened within the past 32 hours, so check the uploads from that.
+            exit 0
+          fi
+      - name: Notify about failed nightly build
+        if: ${{ steps.check-commits.outcome }} != 'success'
+        uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_TITLE: '@agent-sre Nightlies *NOT* published in last 48hrs'
-          SLACK_MESSAGE: |
-            The nightlies have not successfully published in the last 48hrs.
-            Please check the Travis nightly jobs (marked with `CRON`).
-          SLACK_COLOR: '#a30200'
-          SLACK_CHANNEL: '#automation'
-          SLACK_ICON: 'https://emoji.slack-edge.com/TCC5DL092/netdata/22679c70af359fca.png'
-          SLACK_USERNAME: netdatabot
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: 'danger'
+          SLACK_FOOTER: ''
+          SLACK_ICON_EMOJI: ':github-actions:'
+          SLACK_TITLE: '@agent-sre A nightly build should have run in the past day, but has not.'
+          SLACK_USERNAME: 'GitHub Actions'
+          SLACK_MESSAGE: >-
+            Based on the state of the netdata/netdata repository, a nightly build should have run at some point within the past 32 hours, but it does not appear that a nightly build has run within that time.
+            See https://github.com/netdata/netdata/actions/workflows/release.yml for information about the latest release workflow runs. Nightly builds should show ‘scheduled’ for the trigger.
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   check-kickstart:
     name: Verify that kickstart script is deployed correctly
@@ -39,8 +65,7 @@ jobs:
       - name: Fetch master kickstart script
         id: github
         run: |
-          wget -Sv -O kickstart-master.sh -t 6 -T 60 -w 300 -N --no-dns-cache --retry-connrefused \
-              https://raw.githubusercontent.com/netdata/netdata/master/packaging/installer/kickstart.sh || exit 1
+          wget ${WGET_OPTS} -O kickstart-master.sh https://raw.githubusercontent.com/netdata/netdata/master/packaging/installer/kickstart.sh || exit 1
       - name: Notify about failure to retrieve script
         if: ${{ steps.github.outcome }} != 'success'
         uses: rtCamp/action-slack-notify@v2
@@ -57,8 +82,7 @@ jobs:
       - name: Fetch deployed kickstart script
         id: deployed
         run: |
-          wget -Sv -O kickstart-deployed.sh -t 6 -T 60 -w 300 -N --no-dns-cache --retry-connrefused \
-              https://my-netdata.io/kickstart.sh || exit 1
+          wget ${WGET_OPTS} -O kickstart-deployed.sh https://my-netdata.io/kickstart.sh || exit 1
       - name: Notify about failure to retrieve script
         if: ${{ steps.deployed.outcome }} != 'success'
         uses: rtCamp/action-slack-notify@v2
@@ -97,8 +121,7 @@ jobs:
       - name: Fetch documentation
         id: docs
         run: |
-          wget -Sv -O kickstart.md -t 6 -T 60 -w 300 -N --no-dns-cache --retry-connrefused \
-              https://raw.githubusercontent.com/netdata/learn/master/docs/agent/packaging/installer/methods/kickstart.md || exit 1
+          wget ${WGET_OPTS} -O kickstart.md https://raw.githubusercontent.com/netdata/learn/master/docs/agent/packaging/installer/methods/kickstart.md || exit 1
       - name: Notify about failure to retrieve documentation
         if: ${{ steps.docs.outcome }} != 'success'
         uses: rtCamp/action-slack-notify@v2
@@ -115,8 +138,7 @@ jobs:
       - name: Fetch deployed kickstart script
         id: deployed
         run: |
-          wget -Sv -O kickstart.sh -t 6 -T 60 -w 300 -N --no-dns-cache --retry-connrefused \
-              https://my-netdata.io/kickstart.sh || exit 1
+          wget ${WGET_OPTS} -O kickstart.sh https://my-netdata.io/kickstart.sh || exit 1
       - name: Notify about failure to retrieve script
         if: ${{ steps.deployed.outcome }} != 'success'
         uses: rtCamp/action-slack-notify@v2
