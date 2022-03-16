@@ -18,14 +18,14 @@
 # I know this is extremely dumb solution but it works
 - name: Install Netdata repository configuration
   apt:
-    deb: https://packagecloud.io/netdata/netdata/packages/debian/bullseye/netdata-repo_1-1_all.deb/download.deb
+    deb: https://packagecloud.io/netdata/netdata/packages/debian/buster/netdata-repo_1-1_all.deb/download.deb
   become: True
 
 - name: Update repos
   apt:
     upgrade: dist
     update_cache: yes
-    cache_valid_time: 3600
+    #  cache_valid_time: 3600
 
 #- name: add Debian 11 Netdata repo
 #  apt_repository: 

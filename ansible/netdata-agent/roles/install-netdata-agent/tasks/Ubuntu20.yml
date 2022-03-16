@@ -2,7 +2,8 @@
 
 - package:
     name: "{{ netdata_agent_package_name }}"
-    state: present
+    update_cache: yes
+    state: latest
 
 - name: Start "{{ netdata_agent_service_name }}" service
   systemd:

@@ -34,4 +34,6 @@
 
     - name: Claim the node
       shell: netdata-claim.sh -token="{{ claim_token }}" -rooms="{{ claim_rooms }}" -url="{{ claim_url }}" -id="{{ new_uuid }}"
+      notify: restart netdata agent
+
   when: not is_claimed
