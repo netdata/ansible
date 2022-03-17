@@ -23,9 +23,10 @@ Titles reflect timing relative to release day in business days.
 
 ### Release day:
 - [ ] Confirm with the agent team on Slack that there are no pending blockers for the release
+- [ ] Verify the status of CI on the latest commit in the relevant branch for the release
 - [ ] Announce hard code freeze for release in #general on Slack
-- [ ] Create an empty release commit and push to master. The commit message must match `\[netdata (release candidate|(major|minor|patch) release)\]`
-- [ ] Verify that all triggered Travis CI jobs finish successfully
+- [ ] Trigger the release at https://github.com/netdata/netdata/actions/workflows/release.yml
+- [ ] Verify that the Release CI workflow completes correctly
 - [ ] Verify that the Docker build CI workflow has completed and that the `latest` and `stable` tags have been updated on Docker Hub
 - [ ] Verify that the package build CI workflow has correctly published packages to PackageCloud
 - [ ] Verify that the main build CI workflow has finished completely and created a draft release with the correct artifacts attached
@@ -39,8 +40,3 @@ Titles reflect timing relative to release day in business days.
 - [ ] Verify that the demo sites have updated to the new release, and if not update them
 - [ ] Verify that the Helm chart update has been merged
 - [ ] Send a pull request to Digital Ocean Marketplace repository with the update to chart and app version for the agent
-
-### Once no further hotfixes are required:
-- [ ] Announce the end of the soft code freeze for the release in #agent on Slack
-- [ ] Merge `develop` back into `master` and delete the branch
-- [ ] Find a list of any remaining PRs targeting the `develop` branch (search PRs using `is:open is:pr base:develop`) and notify their authors to update to target the master branch.
