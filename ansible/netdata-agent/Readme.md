@@ -38,6 +38,5 @@ You might also want to set some parameters in inventory file, of course. Or dire
 You cannot just switch from stable to edge repos (nor visa versa). You have to purge existing installation first.
 
 ## To do
-- Currently the Debian-based systems always install `stable` version, ignoring `distro` variable. To be fixed.
 
 - The only agent configuration file used for the time being is `netdata.conf`. Perhaps, other configuration files handling should be added.

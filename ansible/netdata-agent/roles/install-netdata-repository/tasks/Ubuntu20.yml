@@ -1,28 +1,13 @@
 ---
 
-- name: Install some essential packages
-  apt:
-    name: "{{ item }}"
-    update_cache: yes
-  become: True
-  loop:
-    - debian-archive-keyring
-    - apt-transport-https
-
 - name: Install Netdata repo key.
   apt_key:
-    url: https://packagecloud.io/netdata/netdata-repoconfig/gpgkey
+    url: https://packagecloud.io/netdata/netdata/gpgkey
     state: present
   become: True
 
-# I know this is extremely dumb solution but it works
-- name: Install Netdata repository configuration
+- name: Install Netdata repository package
   apt:
-    deb: https://packagecloud.io/netdata/netdata/packages/ubuntu/focal/netdata-repo_1-1_all.deb/download.deb
+    deb: "{{ repo_uri }}"
   become: True
 
-- name: Update repos
-  apt:
-    upgrade: dist
-    update_cache: yes
-    cache_valid_time: 3600

@@ -12,5 +12,7 @@ all:
       ansible_host: 192.168.10.103
     rocky8:
       ansible_host: 192.168.10.6
+    alpine:
+      ansible_host: 192.168.10.8
   vars:
     ansible_user: ikarpov

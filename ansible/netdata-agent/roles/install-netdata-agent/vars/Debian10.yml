@@ -2,3 +2,6 @@
 
 netdata_agent_package_name: netdata
 netdata_agent_service_name: netdata
+
+package_uri: "{{ 'https://packagecloud.io/netdata/netdata/packages/debian/buster/' if distro == 'stable' else 'https://packagecloud.io/netdata/netdata-edge/packages/debian/buster/' }}"
+package_name: "{{ 'netdata_1.33.1_' if distro == 'stable' else 'netdata_1.33.1-195-nightly_' }}"

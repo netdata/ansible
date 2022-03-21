@@ -1,4 +1,4 @@
-distro: stable
+distro: edge
 become: yes
 claim_token: 
 claim_rooms:

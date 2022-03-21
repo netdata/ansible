@@ -3,10 +3,12 @@
     name: uuid-runtime
     state: latest
 
-- package:
-    name: "{{ netdata_agent_package_name }}"
-    state: latest
+- name: Install the package
+  apt:
+    name: netdata
     update_cache: yes
+    state: latest
+    # default_release:
 
 - name: Start "{{ netdata_agent_service_name }}" service
   systemd:
@@ -14,3 +16,4 @@
     state: started
     enabled: yes
     masked: no
+
