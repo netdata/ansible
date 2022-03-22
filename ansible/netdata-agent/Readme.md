@@ -10,6 +10,9 @@ Requires jmespath installed on the host system
 
 `Debian 10, Debian 11`,`Ubuntu 20`
 
+## Should work also on (not tested)
+`Ubuntu 18, Ubuntu 22` 
+
 ## Playbook components, a short description
 > netdata-agent.yml:
 
