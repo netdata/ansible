@@ -1,0 +1,13 @@
+---
+
+- name: Install Netdata repo key.
+  apt_key:
+    url: https://packagecloud.io/netdata/netdata/gpgkey
+    state: present
+  become: True
+
+- name: Install Netdata repository package
+  apt:
+    deb: "{{ repo_uri }}"
+  become: True
+
