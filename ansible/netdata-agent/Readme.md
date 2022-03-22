@@ -14,7 +14,11 @@ Requires jmespath installed on the host system
 > netdata-agent.yml:
 
 Installs Netdata Packagecloud repository whenever possible.
-Installs Netdata agent latest available version, trying to avoid installation from other repositories.
+Installs Netdata agent latest available version, trying to avoid installation from other repositories. By default, the 'edge' is used. You can change the default in group_vars/all or set it in the command line using external variable:
+
+`ansible-playbook -e "distro=stable" netdata-agent.yml`
+
+Or you can set in on per host basis, using inventory file or hosts_var/hostname.
 
 > purge.yml:
 
