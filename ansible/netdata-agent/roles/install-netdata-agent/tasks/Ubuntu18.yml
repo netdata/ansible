@@ -1,0 +1,12 @@
+---
+
+- package:
+    name: "{{ netdata_agent_package_name }}"
+    update_cache: yes
+    state: latest
+
+- name: Start "{{ netdata_agent_service_name }}" service
+  systemd:
+    name: "{{ netdata_agent_service_name }}"
+    state: started
+    enabled: True
