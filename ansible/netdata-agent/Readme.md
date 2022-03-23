@@ -6,7 +6,7 @@ You have to edit the inventory file `hosts` and, perhaps, `ansible.cfg`.
 
 Requires jmespath installed on the host system
 ## Tested on
-`Centos 7, Rocky 8`
+`Centos 7, Rocky 8, Orace Linux 8`
 
 `Debian 10, Debian 11`,`Ubuntu 20`
 

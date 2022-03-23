@@ -1,20 +1,9 @@
 ---
 
-# Not needed for Debian 11?
-#- name: Install some essential packages
-#   apt:
-#     name: "{{ item }}"
-#     update_cache: yes
-#   loop:
-#     - gpg
-#     - debian-archive-keyring
-#     - apt-transport-https
-
  - name: Install Netdata repo key.
    apt_key:
-     url: https://packagecloud.io/netdata/netdata-repoconfig/gpgkey
+     url: https://packagecloud.io/netdata/netdata/gpgkey
      state: present
-   become: True
 
  - name: Install netdata repo
    apt:

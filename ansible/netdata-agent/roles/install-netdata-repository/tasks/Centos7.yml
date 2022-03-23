@@ -1,9 +1,5 @@
 ---
 
-# I know this is extremely dumb solution but it works
-# The 'distro' variable is set in 'install-netdata-repository/defaults/main.yml' and is stable by default
-# You might want to override it in 'group_vars/' for example. Or in command line. Or somewhere else.
-#
 - name: Install Netdata stable repository configuration
   yum:
     name: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/7/netdata-repo-1-1.noarch.rpm/download.rpm

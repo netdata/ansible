@@ -10,6 +10,7 @@
     path: "{{ item }}"
     state: absent
   with_items:
+    - /etc/netdata
     - /var/log/netdata
     - /var/lib/netdata
     - /var/cache/netdata

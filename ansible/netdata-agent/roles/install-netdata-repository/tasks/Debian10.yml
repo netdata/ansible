@@ -13,7 +13,6 @@
   apt_key:
     url: https://packagecloud.io/netdata/netdata-repoconfig/gpgkey
     state: present
-  become: True
 
 - name: Install netdata repo
   apt:

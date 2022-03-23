@@ -5,7 +5,7 @@
     state: absent
     name:
       - "{{ netdata_repo_package }}"
-      - "{{ netdata_agent_package_name }}"
+      - "{{ netdata_agent_package }}"
   notify: dnf-clean-metadata
 
 - name: Remove the remains

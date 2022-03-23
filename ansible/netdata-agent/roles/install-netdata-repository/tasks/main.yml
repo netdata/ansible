@@ -1,9 +1,9 @@
 ---
 # tasks file for roles/netdata-repository
-- name: include distribution specific vars
+- name: include OS specific vars
   include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
-- name: include distribution specific install
+- name: include OS specific tasks
   include_tasks: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
 

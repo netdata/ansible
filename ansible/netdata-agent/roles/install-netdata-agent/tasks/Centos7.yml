@@ -19,7 +19,7 @@
 
 # We disabled EPEL for netdata agent installation to exclude the possibility of installing EPEL package
 - package:
-    name: "{{ netdata_agent_package_name }}"
+    name: "{{ netdata_agent_package }}"
     state: latest
     update_cache: True
     disable_gpg_check: True
@@ -34,8 +34,8 @@
     mode: '0644'
   notify: restart netdata agent
 
-- name: Start "{{ netdata_agent_service_name }}" service
+- name: Start "{{ netdata_agent_service }}" service
   systemd:
-    name: "{{ netdata_agent_service_name }}"
+    name: "{{ netdata_agent_service }}"
     state: started
     enabled: True

@@ -1,9 +1,5 @@
 ---
 
-# I know this is extremely dumb solution but it works
-# The 'distro' variable is set in 'install-netdata-repository/defaults/main.yml' and is stable by default
-# You might want to override it in 'group_vars/' for example. Or in command line. Or somewhere else.
-#
 - name: Import a key from a url
   rpm_key:
     state: present
