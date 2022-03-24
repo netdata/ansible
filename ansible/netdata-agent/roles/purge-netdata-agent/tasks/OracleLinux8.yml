@@ -4,16 +4,15 @@
   dnf:
     state: absent
     name:
-      - netdata
-      - netdata-repo
-      - netdata-repo-edge
-  notify: dnf-clean-metadata
+      - "{{ netdata_repo_package }}"
+      - "{{ netdata_agent_package }}"
 
 - name: Remove the remains
   file:
     path: "{{ item }}"
     state: absent
   with_items:
+    - /etc/netdata
     - /var/log/netdata
     - /var/lib/netdata
     - /var/cache/netdata

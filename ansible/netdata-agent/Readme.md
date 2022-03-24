@@ -8,10 +8,10 @@ Requires jmespath installed on the host system
 ## Tested on
 `Centos 7, Rocky 8, Orace Linux 8`
 
-`Debian 10, Debian 11`,`Ubuntu 20`
+`Debian 10, Debian 11, Ubuntu 20, Ubuntu22`
 
 ## Should work also on (not tested)
-`Ubuntu 18, Ubuntu 22` 
+`Ubuntu 18` 
 
 ## Playbook components, a short description
 > netdata-agent.yml:

@@ -2,6 +2,9 @@
 
 - name: Remove Netdata configuration package
   yum:
-    name: "{{netdata_repo_package}}"
+    name: 
+      - netdata
+      - netdata-repo
+      - netdata-repo-edge
     state: absent
   notify: yum-clean-metadata

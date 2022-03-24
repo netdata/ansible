@@ -1,13 +1,17 @@
 ---
 
-- name: remove Netdata packages
-  dnf:
+- name: Remove Netdata repo key.
+  apt_key:
+    url: https://packagecloud.io/netdata/netdata-repoconfig/gpgkey
     state: absent
+
+- name: remove Netdata packages
+  apt:
+    state: absent
+    purge: True
     name:
       - netdata
-      - netdata-repo
       - netdata-repo-edge
-  notify: dnf-clean-metadata
 
 - name: Remove the remains
   file:
@@ -18,3 +22,4 @@
     - /var/lib/netdata
     - /var/cache/netdata
     - /usr/libexec/netdata
+   
