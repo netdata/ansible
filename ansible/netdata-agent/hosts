@@ -2,6 +2,8 @@
 
 all:
   hosts:
+    ubuntu18:
+      ansible_host: 192.168.10.120
     ubuntu20:
       ansible_host: 192.168.10.7
     ubuntu22:

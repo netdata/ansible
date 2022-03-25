@@ -2,7 +2,7 @@
 # tasks file for roles/claim
 
 - name: Get information about running agent
-  shell: netdatacli aclk-state json
+  command: netdatacli aclk-state json
   register: agent_info
 
   #- set_fact: 
@@ -14,14 +14,14 @@
 - name: Claim the new node if is not claimed yet
   block:
     - name: Generate UUID
-      shell: uuidgen
+      command: uuidgen
       register: uuid
 
     - set_fact:
         new_uuid: "{{ uuid.stdout }}"
 
     - name: Claim the node
-      shell: netdata-claim.sh -token="{{ claim_token }}" -rooms="{{ claim_rooms }}" -url="{{ claim_url }}" -id="{{ new_uuid }}"
+      command: netdata-claim.sh -token="{{ claim_token }}" -rooms="{{ claim_rooms }}" -url="{{ claim_url }}" -id="{{ new_uuid }}"
       notify: restart netdata agent
 
   when: not is_claimed
