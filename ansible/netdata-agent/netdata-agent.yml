@@ -9,7 +9,11 @@
       package:
         name: epel-release
         state: latest
-      when: ansible_facts['os_family'] == 'RedHat'
+        #      when: ansible_facts['os_family'] == 'RedHat'
+      when:
+        ansible_distribution in ['RedHat', 'CentOS', 'ScientificLinux'] and
+        (ansible_distribution_version is version_compare('7', '<') or
+        ansible_distribution_version is version_compare('8', '>='))
 
   roles:
     - { role: install-netdata-repository, become: yes }

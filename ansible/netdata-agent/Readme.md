@@ -7,7 +7,7 @@ It is likely that you will also want to edit netdata agent configuration file(s)
 
 Requires jmespath installed on the host system
 ## Tested on
-`Centos 7, Rocky 8, Orace Linux 8`
+`Centos 7, Rocky 8, Oracle Linux 8, Fedora 35`
 
 `Debian 10, Debian 11, Ubuntu 18, Ubuntu 20, Ubuntu22`
 
