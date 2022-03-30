@@ -1,0 +1,25 @@
+---
+
+- name: Remove Netdata repo key.
+  apt_key:
+    url: https://packagecloud.io/netdata/netdata-repoconfig/gpgkey
+    state: absent
+
+- name: remove Netdata packages
+  apt:
+    state: absent
+    purge: True
+    name:
+      - netdata
+      - netdata-repo-edge
+
+- name: Remove the remains
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /var/log/netdata
+    - /var/lib/netdata
+    - /var/cache/netdata
+    - /usr/libexec/netdata
+   

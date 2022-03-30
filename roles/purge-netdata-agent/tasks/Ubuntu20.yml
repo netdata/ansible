@@ -1,0 +1,6 @@
+- name: remove Netdata packages
+  apt:
+    state: absent
+    name: "netdata*"
+    purge: yes
+    autoremove: yes

@@ -1,0 +1,4 @@
+---
+
+netdata_agent_package: netdata
+netdata_agent_service: netdata

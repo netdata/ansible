@@ -1,0 +1,4 @@
+---
+
+claiming_script: "/usr/sbin/netdata-claim.sh"
+

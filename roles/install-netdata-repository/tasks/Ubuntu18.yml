@@ -1,0 +1,20 @@
+---
+
+- name: Install some essential packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  loop:
+    - gpg
+    - debian-archive-keyring
+    - apt-transport-https
+
+- name: Install Netdata repo key.
+  apt_key:
+    url: https://packagecloud.io/netdata/netdata/gpgkey
+    state: present
+
+- name: Install Netdata repository package
+  apt:
+    deb: "{{ repo_uri }}"
+

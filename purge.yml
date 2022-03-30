@@ -1,0 +1,7 @@
+- hosts: all
+  gather_facts: True
+  become: True
+
+  roles:
+    - { role: purge-netdata-agent, become: yes }
+    - { role: purge-netdata-repository, become: yes }

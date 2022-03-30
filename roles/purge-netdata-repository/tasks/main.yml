@@ -1,0 +1,11 @@
+---
+
+# tasks file for roles/purge-netdata-repository
+
+- name: include OS specific vars
+  include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+
+- name: include OS specific tasks
+  include_tasks: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+
+
