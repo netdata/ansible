@@ -13,13 +13,25 @@
     - nodejs
     - openssl
 
-- package:
+# We disabled EPEL for netdata agent installation to exclude the possibility of installing EPEL package
+- name: Installing the latest available version of netdata agent
+  dnf:
     name: "{{ netdata_agent_package }}"
     state: latest
-    update_cache: True
+    update_cache: yes
     disable_gpg_check: True
     disablerepo: "epel"
+  when: agent_version is not defined
 
+# We disabled EPEL for netdata agent installation to exclude the possibility of installing EPEL package
+- name: Installing the version {{ agent_version }} of netdata agent
+  dnf:
+    name: netdata-{{ agent_version }}.el8
+    state: present
+    update_cache: yes
+    disable_gpg_check: True
+    disablerepo: "epel"
+  when: agent_version is defined
 
 - name: Writing configuration to /etc/netdata/netdata.conf
   ansible.builtin.template:

@@ -21,6 +21,25 @@ Installs Netdata agent latest available version, trying to avoid installation fr
 
 Or you can set in on per host basis, using inventory file or hosts_var/hostname.
 
+It is also possible to install a specific version of a package instead of the last available one.
+To do this, specify on the command line the external variable agent_version containing the exact version name.
+The version can also be specified on per host basis, for example.
+The operator is responsible for ensuring that this name matches the actual package in the repository.
+Please note that at some point the naming scheme was changed from the earlier packages in edge, for example 1.29.15, to the later ones with the suffix "-nightly".
+
+That is to say
+
+`ansible-playbook -e "agent_version=1.29.15" netdata-agent.yml`
+
+But
+
+`ansible-playbook -e "agent_version=1.33.1-337-nightly" netdata-agent.yml`
+
+You got the idea.
+
+Also, downgrading is not supported and such support is not planned. So, just like with switching between `stable` and `edge` repository, you have to purge first.
+Also, this ability is limited by changes in libraries which are hard/impossible to test in general. Of course, you can easily make needed modifications in each particular case.
+
 > purge.yml:
 
 Removes both installed repository and the package, making efforts to remove all possible remains like the log or configuration files.

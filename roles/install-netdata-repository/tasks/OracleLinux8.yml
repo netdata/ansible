@@ -1,11 +1,11 @@
 ---
 
-- name: Import a key from a url
+- name: Import the stable repo key from a url
   rpm_key:
     state: present
     key: https://packagecloud.io/netdata/netdata/gpgkey
 
-- name: Import a key from a url
+- name: Import the edge repo  key from a url
   rpm_key:
     state: present
     key: https://packagecloud.io/netdata/netdata-edge/gpgkey

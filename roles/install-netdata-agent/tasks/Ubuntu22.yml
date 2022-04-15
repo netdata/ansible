@@ -1,9 +1,19 @@
 ---
 
-- package:
-    name: "{{ netdata_agent_package }}"
-    update_cache: yes
+- name: Install the latest version of netdata agent package
+  apt:
+    name: netdata
     state: latest
+    update_cache: yes
+  when: agent_version is not defined
+
+- name: Install version "{{ agent_version }}" of netdata agent package
+  apt:
+    name: netdata={{ agent_version }}
+    state: present
+    update_cache: yes
+  when: agent_version is defined
+
 
 - name: Start "{{ netdata_agent_service }}" service
   systemd:

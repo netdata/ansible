@@ -1,15 +1,23 @@
 ---
 
-- package:
-    name: uuid-runtime
-    state: latest
-
-- name: Install the package
+- name: Make sure uuid-runtime is installed
   apt:
-    name: netdata
+    name: uuid-runtime
     update_cache: yes
     state: latest
+
+- name: Install the latest version of netdata agent package
+  apt:
+    name: netdata
+    state: latest
     # default_release: 
+  when: agent_version is not defined
+
+- name: Install version "{{ agent_version }}" of netdata agent package
+  apt:
+    name: netdata={{ agent_version }}
+    state: present
+  when: agent_version is defined
 
 - name: Start "{{ netdata_agent_service }}" service
   systemd:
