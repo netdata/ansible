@@ -1,0 +1,37 @@
+---
+
+- name: Dependencies first
+  dnf:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  loop:
+    - Judy
+    - brotli
+    - libuv
+    - nmap-ncat
+    - nodejs
+    - openssl
+
+- package:
+    name: "{{ netdata_agent_package }}"
+    state: latest
+    update_cache: True
+    disable_gpg_check: True
+    disablerepo: "epel"
+
+
+- name: Writing configuration to /etc/netdata/netdata.conf
+  ansible.builtin.template:
+    src: netdata.conf.j2
+    dest: /etc/netdata/netdata.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart netdata agent
+
+- name: Start "{{ netdata_agent_service }}" service
+  systemd:
+    name: "{{ netdata_agent_service }}"
+    state: started
+    enabled: True
