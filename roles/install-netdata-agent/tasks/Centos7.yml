@@ -18,12 +18,24 @@
     - yum-plugin-priorities
 
 # We disabled EPEL for netdata agent installation to exclude the possibility of installing EPEL package
-- package:
+- name: Installing the latest available version of netdata agent
+  yum:
     name: "{{ netdata_agent_package }}"
     state: latest
     update_cache: True
     disable_gpg_check: True
     disablerepo: "epel"
+  when: agent_version is not defined
+
+# We disabled EPEL for netdata agent installation to exclude the possibility of installing EPEL package
+- name: Installing the version {{ agent_version }} of netdata agent
+  yum:
+    name: netdata-{{ agent_version }}.el7
+    state: present
+    update_cache: True
+    disable_gpg_check: True
+    disablerepo: "epel"
+  when: agent_version is defined
 
 - name: Writing configuration to /etc/netdata/netdata.conf
   ansible.builtin.template:

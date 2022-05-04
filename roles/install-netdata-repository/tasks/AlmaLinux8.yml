@@ -1,25 +1,25 @@
 ---
 
-- name: Import the stable repo key from a url
+- name: Import a key from a url
   rpm_key:
     state: present
     key: https://packagecloud.io/netdata/netdata/gpgkey
 
-- name: Import the edge repo  key from a url
+- name: Import a key from a url
   rpm_key:
     state: present
     key: https://packagecloud.io/netdata/netdata-edge/gpgkey
 
 - name: Install Netdata stable repository configuration
   dnf:
-    name: https://packagecloud.io/netdata/netdata-repoconfig/packages/ol/8/netdata-repo-1-1.noarch.rpm/download.rpm
+    name: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/8/netdata-repo-1-1.noarch.rpm/download.rpm
     state: present
     disable_gpg_check: True
   when: distro == 'stable'
 
 - name: Install Netdata nightly repository configuration
   dnf:
-    name: https://packagecloud.io/netdata/netdata-repoconfig/packages/ol/8/netdata-repo-edge-1-1.noarch.rpm/download.rpm
+    name: https://packagecloud.io/netdata/netdata-repoconfig/packages/el/8/netdata-repo-edge-1-1.noarch.rpm/download.rpm
     state: present
     disable_gpg_check: True
   when: distro == 'edge'
