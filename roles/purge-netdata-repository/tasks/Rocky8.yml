@@ -1,6 +1,6 @@
 ---
 
-- name: remove Netdata packages
+- name: Remove Netdata packages
   dnf:
     state: absent
     name:

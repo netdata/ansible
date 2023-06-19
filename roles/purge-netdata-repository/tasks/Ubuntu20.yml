@@ -5,7 +5,7 @@
     url: https://packagecloud.io/netdata/netdata-repoconfig/gpgkey
     state: absent
 
-- name: remove Netdata packages
+- name: Remove Netdata packages
   apt:
     state: absent
     purge: True
