@@ -1,8 +1,8 @@
 ---
 # tasks file for roles/purge-netdata-agent
 
-- name: include OS specific vars
-  include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+- name: Include OS specific vars
+  ansible.builtin.include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
 
-- name: include OS specific install
-  include_tasks: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
+- name: Include OS specific install
+  ansible.builtin.include_tasks: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"

@@ -1,6 +1,8 @@
-- name: remove Netdata packages
-  apt:
+---
+
+- name: Remove Netdata packages
+  ansible.builtin.apt:
     state: absent
     name: "netdata*"
-    purge: yes
-    autoremove: yes
+    purge: true
+    autoremove: true
