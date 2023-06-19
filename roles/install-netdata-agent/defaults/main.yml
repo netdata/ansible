@@ -12,4 +12,3 @@ oom_score: 1000
 owner: root
 group: netdata
 bind_to: localhost
-

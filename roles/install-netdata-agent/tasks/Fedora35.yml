@@ -1,10 +1,11 @@
 ---
 
-- package:
+- name: Install Netdata agent package
+  ansible.builtin.package:
     name: "{{ netdata_agent_package }}"
     state: latest
-    update_cache: True
-    disable_gpg_check: True
+    update_cache: true
+    disable_gpg_check: true
     #    disablerepo: "epel" # Not needed for Fedora
 
 
@@ -17,8 +18,8 @@
     mode: '0644'
   notify: restart netdata agent
 
-- name: Start "{{ netdata_agent_service }}" service
-  systemd:
+- name: Start service "{{ netdata_agent_service }}"
+  ansible.builtin.systemd:
     name: "{{ netdata_agent_service }}"
     state: started
-    enabled: True
+    enabled: true
