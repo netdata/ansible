@@ -1,7 +1,8 @@
-- hosts: all
-  gather_facts: True
-  become: True
+- name: Purge netdata agent and netdata agent repository
+  hosts: all
+  gather_facts: true
+  become: true
 
   roles:
-    - { role: purge-netdata-agent, become: yes }
-    - { role: purge-netdata-repository, become: yes }
+    - { role: purge-netdata-agent, become: true }
+    - { role: purge-netdata-repository, become: true }
