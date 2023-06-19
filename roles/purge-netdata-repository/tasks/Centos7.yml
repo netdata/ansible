@@ -1,8 +1,8 @@
 ---
 
 - name: Remove Netdata configuration package
-  yum:
-    name: 
+  ansible.builtin.yum:
+    name:
       - netdata
       - netdata-repo
       - netdata-repo-edge

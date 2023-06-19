@@ -1,21 +1,21 @@
 ---
 
 - name: Remove Netdata repo key.
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://packagecloud.io/netdata/netdata-repoconfig/gpgkey
     state: absent
 
 - name: Remove Netdata packages
-  apt:
+  ansible.builtin.apt:
     state: absent
-    purge: True
+    purge: true
     name:
       - netdata
       - netdata-repo
       - netdata-repo-edge
 
 - name: Remove the remains
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: absent
   with_items:
@@ -23,4 +23,3 @@
     - /var/lib/netdata
     - /var/cache/netdata
     - /usr/libexec/netdata
-   
