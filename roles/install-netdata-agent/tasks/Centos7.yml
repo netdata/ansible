@@ -3,10 +3,10 @@
 # We have to install the dependencies from EPEL because we have to disable it when installing netdata agent.
 
 - name: Dependencies first
-  yum:
+  ansible.builtin.yum:
     name: "{{ item }}"
     state: latest
-    update_cache: yes
+    update_cache: true
   loop:
     - Judy
     - brotli
@@ -18,11 +18,12 @@
     - yum-plugin-priorities
 
 # We disabled EPEL for netdata agent installation to exclude the possibility of installing EPEL package
-- package:
+- name: Install netdata agent package
+  ansible.builtin.package:
     name: "{{ netdata_agent_package }}"
     state: latest
-    update_cache: True
-    disable_gpg_check: True
+    update_cache: true
+    disable_gpg_check: true
     disablerepo: "epel"
 
 - name: Writing configuration to /etc/netdata/netdata.conf
@@ -34,8 +35,8 @@
     mode: '0644'
   notify: restart netdata agent
 
-- name: Start "{{ netdata_agent_service }}" service
-  systemd:
+- name: Start service "{{ netdata_agent_service }}"
+  ansible.builtin.systemd:
     name: "{{ netdata_agent_service }}"
     state: started
-    enabled: True
+    enabled: true

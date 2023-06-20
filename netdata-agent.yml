@@ -1,12 +1,15 @@
-- hosts: all
+---
+
+- name: Install Netdata agent
+  hosts: all
   remote_user: "{{ansible_user}}"
-  gather_facts: True
-  become: yes
+  gather_facts: true
+  become: true
 
   pre_tasks:
-    
+
     - name: Add EPEL repository for Centos/Rocky
-      package:
+      ansible.builtin.package:
         name: epel-release
         state: latest
         #      when: ansible_facts['os_family'] == 'RedHat'
@@ -16,5 +19,5 @@
         ansible_distribution_version is version_compare('8', '>='))
 
   roles:
-    - { role: install-netdata-repository, become: yes }
-    - { role: install-netdata-agent, become: yes }
+    - { role: install-netdata-repository, become: true }
+    - { role: install-netdata-agent, become: true }

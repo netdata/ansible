@@ -1,20 +1,19 @@
 ---
 
 - name: Install some essential packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
-    update_cache: yes
+    update_cache: true
   loop:
     - gpg
     - debian-archive-keyring
     - apt-transport-https
 
 - name: Install Netdata repo key.
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://packagecloud.io/netdata/netdata/gpgkey
     state: present
 
 - name: Install Netdata repository package
-  apt:
+  ansible.builtin.apt:
     deb: "{{ repo_uri }}"
-

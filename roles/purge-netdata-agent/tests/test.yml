@@ -1,5 +1,7 @@
 ---
-- hosts: localhost
+
+- name: "Test role: purge-netdata-agent"
+  hosts: localhost
   remote_user: root
   roles:
     - roles/purge-netdata-agent

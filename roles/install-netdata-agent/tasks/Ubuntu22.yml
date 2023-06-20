@@ -1,12 +1,13 @@
 ---
 
-- package:
+- name: Install Netdata package
+  ansible.builtin.package:
     name: "{{ netdata_agent_package }}"
-    update_cache: yes
+    update_cache: true
     state: latest
 
-- name: Start "{{ netdata_agent_service }}" service
-  systemd:
+- name: Start service "{{ netdata_agent_service }}"
+  ansible.builtin.systemd:
     name: "{{ netdata_agent_service }}"
     state: started
-    enabled: True
+    enabled: true

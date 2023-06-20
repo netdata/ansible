@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: Test for role install-netdata-repository
+  hosts: localhost
   remote_user: root
   roles:
-    - roles/netdata-repository
+    - roles/install-netdata-repository

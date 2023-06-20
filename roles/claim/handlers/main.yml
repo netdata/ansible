@@ -1,7 +1,7 @@
 ---
 # handlers file for roles/claim
 
-- name: restart netdata agent
+- name: Restart netdata agent
   ansible.builtin.systemd:
     name: netdata.service
     state: restarted
