@@ -1,5 +1,5 @@
 ---
-# handlers file for roles/purge-netdata-repository
+# handlers file for roles/purge_netdata_repository
 
 - name: Yum clean metadata
   ansible.builtin.command: yum clean metadata
