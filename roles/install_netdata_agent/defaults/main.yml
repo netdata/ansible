@@ -1,5 +1,5 @@
 ---
-# defaults file for roles/install-netdata-agent
+# defaults file for roles/install_netdata_agent
 # Global
 agent_user: netdata
 agent_history: 3600
