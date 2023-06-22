@@ -19,5 +19,5 @@
         ansible_distribution_version is version_compare('8', '>='))
 
   roles:
-    - { role: install-netdata-repository, become: true }
+    - { role: install_netdata_repository, become: true }
     - { role: install_netdata_agent, become: true }
