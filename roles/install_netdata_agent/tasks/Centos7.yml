@@ -5,7 +5,7 @@
 - name: Dependencies first
   ansible.builtin.yum:
     name: "{{ item }}"
-    state: latest
+    state: present
     update_cache: true
   loop:
     - Judy

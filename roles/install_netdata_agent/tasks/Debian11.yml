@@ -2,9 +2,9 @@
 - name: Install uuid-runtime
   ansible.builtin.package:
     name: uuid-runtime
-    state: latest
+    state: present
 
-- name: Install the package
+- name: Install the netdata agent package
   ansible.builtin.apt:
     name: netdata
     update_cache: true

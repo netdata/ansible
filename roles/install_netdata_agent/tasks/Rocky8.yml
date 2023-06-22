@@ -3,7 +3,7 @@
 - name: Dependencies first
   ansible.builtin.dnf:
     name: "{{ item }}"
-    state: latest
+    state: present
     update_cache: true
   loop:
     - Judy
@@ -13,14 +13,13 @@
     - nodejs
     - openssl
 
-- name: Install Netdata package
+- name: Install the netdata agent package
   ansible.builtin.package:
     name: "{{ netdata_agent_package }}"
     state: latest
     update_cache: true
     disable_gpg_check: true
     disablerepo: "epel"
-
 
 - name: Writing configuration to /etc/netdata/netdata.conf
   ansible.builtin.template:

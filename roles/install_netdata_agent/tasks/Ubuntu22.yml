@@ -1,6 +1,6 @@
 ---
 
-- name: Install Netdata package
+- name: Install the netdata agent package
   ansible.builtin.package:
     name: "{{ netdata_agent_package }}"
     update_cache: true
