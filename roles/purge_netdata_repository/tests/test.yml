@@ -1,0 +1,7 @@
+---
+
+- name: "Test for role: purge_netdata_repository"
+  hosts: localhost
+  remote_user: root
+  roles:
+    - roles/purge_netdata_repository
