@@ -4,5 +4,5 @@
   become: true
 
   roles:
-    - { role: purge-netdata-agent, become: true }
-    - { role: purge-netdata-repository, become: true }
+    - { role: purge_netdata_agent, become: true }
+    - { role: purge_netdata_repository, become: true }

@@ -1,0 +1,6 @@
+---
+- name: Test role install_netdata_agent
+  hosts: localhost
+  remote_user: root
+  roles:
+    - roles/install_netdata_agent
