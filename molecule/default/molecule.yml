@@ -7,6 +7,11 @@ driver:
 
 platforms:
 
+  - name: Debian10
+    image: debian:10
+    pre_build_image: false
+    dockerfile: ../common/Dockerfile_debian10.j2
+  
   - name: centos7
     image: quay.io/centos/centos:7
     pre_build_image: true
