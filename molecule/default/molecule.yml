@@ -42,6 +42,29 @@ platforms:
     image: rockylinux:8
     pre_build_image: true
 
+  - name: ubuntu1804
+    image: ubuntu:18.04
+    pre_build_image: false
+    dockerfile: ../common/Dockerfile_ubuntu1804.j2
+
+  - name: ubuntu2004
+    image: geerlingguy/docker-ubuntu2004-ansible:latest
+    dockerfile: ../common/Dockerfile_ubuntu2004.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: false
+
+
+
+#   - name: ubuntu2004
+#     image: ubuntu:20.04
+#     pre_build_image: false
+#     dockerfile: ../common/Dockerfile_ubuntu2004.j2
+
+
+
 
 provisioner:
   name: ansible
