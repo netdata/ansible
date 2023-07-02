@@ -21,6 +21,10 @@ platforms:
     image: quay.io/centos/centos:7
     pre_build_image: true
 
+  - name: fedora35
+    image: fedora:35
+    pre_build_image: true
+
   - name: ubuntu2204
     image: geerlingguy/docker-ubuntu2204-ansible:latest
     dockerfile: ../common/Dockerfile_ubuntu2204.j2
