@@ -34,6 +34,10 @@ platforms:
     privileged: true
     pre_build_image: false
 
+  - name: oraclelinux8
+    image: oraclelinux:8
+    pre_build_image: true
+
 provisioner:
   name: ansible
   env:
