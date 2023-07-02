@@ -1,0 +1,29 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+platforms:
+
+  - name: centos7
+    image: quay.io/centos/centos:7
+    pre_build_image: true
+
+  - name: ubuntu2204
+    image: geerlingguy/docker-ubuntu2204-ansible:latest
+    dockerfile: ../common/Dockerfile.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: false
+
+provisioner:
+  name: ansible
+  env:
+    MOLECULE_NO_LOG: false
+
+verifier:
+  name: ansible

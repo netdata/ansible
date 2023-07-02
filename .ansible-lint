@@ -1,6 +1,6 @@
 ---
-exclude_paths:
-  - roles/*/tests/
-
-# skip_list:
-#   - role-name[path]
+# exclude_paths:
+#   - 'roles/*/tests'
+parseable: true
+skip_list:
+  - role-name[path]
