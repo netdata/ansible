@@ -11,14 +11,19 @@ platforms:
     image: debian:10
     pre_build_image: false
     dockerfile: ../common/Dockerfile_debian10.j2
-  
+
+  - name: debian11
+    image: debian:11
+    pre_build_image: false
+    dockerfile: ../common/Dockerfile_debian11.j2
+
   - name: centos7
     image: quay.io/centos/centos:7
     pre_build_image: true
 
   - name: ubuntu2204
     image: geerlingguy/docker-ubuntu2204-ansible:latest
-    dockerfile: ../common/Dockerfile.j2
+    dockerfile: ../common/Dockerfile_ubuntu2204.j2
     command: ""
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
