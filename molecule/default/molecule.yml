@@ -38,6 +38,11 @@ platforms:
     image: oraclelinux:8
     pre_build_image: true
 
+  - name: rockylinux8
+    image: rockylinux:8
+    pre_build_image: true
+
+
 provisioner:
   name: ansible
   env:
