@@ -2,6 +2,8 @@ galaxy_info:
   author: Netdata packaging team
   description: real-time charts for system monitoring (https://netdata.cloud/)
   company: Netdata Inc.
+  role_name: install_netdata_repository
+  namespace: netdata
 
   license: GPL-3.0-or-later
 
