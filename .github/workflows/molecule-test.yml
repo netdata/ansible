@@ -1,0 +1,34 @@
+name: Molecule-test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: null
+jobs:
+  molecule:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario:
+          - centos7
+          - Debian10
+          - debian11
+          - fedora35
+          - oraclelinux8
+          - rockylinux8
+          - ubuntu18.04
+          - ubuntu2004
+          - ubuntu2204
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: "${{ github.repository }}"
+      - name: Molecule
+        uses: gofrolist/molecule-action@v2
+        with:
+          molecule_command: test
+        env:
+          ANSIBLE_FORCE_COLOR: '1'
