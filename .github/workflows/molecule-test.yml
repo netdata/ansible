@@ -30,5 +30,6 @@ jobs:
         uses: gofrolist/molecule-action@v2
         with:
           molecule_command: test
+          molecule_args: --scenario-name ${{ matrix.scenario }}
         env:
           ANSIBLE_FORCE_COLOR: '1'
