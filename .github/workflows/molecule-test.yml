@@ -26,10 +26,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: "${{ github.repository }}"
+      - name: Init python env
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
       -  name: Install dependencies
          run: |
-          python -m pip install --upgrade pip
-          python -m pip install ansible-lint molecule molecule-plugins[docker] docker flake8 flake8-bugbear flake8-docstrings flake8-import-order flake8-pylint pytest pytest-testinfra yamllint
+          pip install --upgrade pip
+          pip install ansible-lint molecule molecule-plugins[docker] docker flake8 flake8-bugbear flake8-docstrings flake8-import-order flake8-pylint pytest pytest-testinfra yamllint
       - name: Molecule
         uses: gofrolist/molecule-action@v2
         with:
