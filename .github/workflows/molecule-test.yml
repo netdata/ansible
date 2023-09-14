@@ -12,15 +12,15 @@ jobs:
       fail-fast: false
       matrix:
         scenario:
-#          - centos7
-#          - Debian10
-#          - debian11
-#          - fedora35
-#          - oraclelinux8
-#          - rockylinux8
-#          - ubuntu18.04
-#          - ubuntu2004
-           - ubuntu2204
+          - centos7
+          - Debian10
+          - debian11
+          - fedora35
+          - oraclelinux8
+          - rockylinux8
+          - ubuntu18.04
+          - ubuntu2004
+          - ubuntu2204
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,9 +34,6 @@ jobs:
          run: |
           pip install --upgrade pip
           pip install ansible-lint molecule molecule-plugins[docker] docker flake8 flake8-bugbear flake8-docstrings flake8-import-order flake8-pylint pytest pytest-testinfra yamllint
-      - name: Molecule
-        uses: gofrolist/molecule-action@v2
-        with:
-          molecule_command: test
-        env:
-          ANSIBLE_FORCE_COLOR: '1'
+      - name: Run molecule tests
+        run: |
+          molecule test --scenario-name ${{ matrix.scenario }} --platform-name ${{ matrix.scenario }}
