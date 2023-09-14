@@ -1,7 +1,8 @@
 ---
 dependency:
   name: galaxy
-
+  options:
+    role-file: requirements.yml
 driver:
   name: docker
 
@@ -55,7 +56,7 @@ platforms:
 provisioner:
   name: ansible
   env:
-#    MOLECULE_NO_LOG: false
+    MOLECULE_NO_LOG: false
 
 verifier:
   name: ansible
