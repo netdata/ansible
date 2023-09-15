@@ -1,0 +1,39 @@
+name: Molecule-test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: null
+jobs:
+  molecule:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario:
+          - centos7
+          - Debian10
+          - debian11
+          - fedora35
+          - oraclelinux8
+          - rockylinux8
+          - ubuntu18.04
+          - ubuntu2004
+          - ubuntu2204
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: "${{ github.repository }}"
+      - name: Init python env
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      -  name: Install dependencies
+         run: |
+          pip install --upgrade pip
+          pip install ansible-lint molecule molecule-plugins[docker] docker flake8 flake8-bugbear flake8-docstrings flake8-import-order flake8-pylint pytest pytest-testinfra yamllint
+      - name: Run molecule tests
+        run: |
+          molecule test --scenario-name ${{ matrix.scenario }} --platform-name ${{ matrix.scenario }}
