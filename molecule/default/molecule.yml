@@ -1,7 +1,8 @@
 ---
 dependency:
   name: galaxy
-
+  options:
+    role-file: requirements.yml
 driver:
   name: docker
 
@@ -13,12 +14,12 @@ platforms:
 
   - name: Debian10
     image: debian:10
-    pre_build_image: false
+    pre_build_image: true
     dockerfile: ../common/Dockerfile_debian10.j2
 
   - name: debian11
     image: debian:11
-    pre_build_image: false
+    pre_build_image: true
     dockerfile: ../common/Dockerfile_debian11.j2
 
   - name: fedora35
