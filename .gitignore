@@ -1,0 +1,5 @@
+hosts
+ansible.cfg
+test.yml
+.vscode
+.swp
