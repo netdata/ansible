@@ -1,5 +1,6 @@
+version: "0.1.0"
+
 galaxy_info:
-  version: "0.1.0"
   author: Ralph Meijer
   description: Deploys the NetData agent
   company: Netdata Inc.
