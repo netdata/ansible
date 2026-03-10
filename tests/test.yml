@@ -1,0 +1,10 @@
+# CI test against localhost
+- name: CI tests for localhost
+  hosts: localhost
+  roles:
+    - role: ../netdata-ansible
+      vars:
+        netdata_manage_config: true
+        netdata_manage_charts: true
+        netdata_custom_config_path: "netdata.conf.j2"
+        netdata_custom_charts_path: "example.chart.j2"

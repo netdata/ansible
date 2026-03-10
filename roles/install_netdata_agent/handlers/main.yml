@@ -1,7 +1,0 @@
----
-# handlers file for roles/install_netdata_agent
-
-- name: Restart netdata agent
-  ansible.builtin.systemd:
-    name: netdata.service
-    state: restarted

@@ -1,0 +1,42 @@
+---
+# Define the Netdata release channel
+# Supported values: stable, nightly (alias for edge), edge
+netdata_release_channel: "stable"
+
+# Define if we manage the Netdata configuration
+netdata_manage_config: false
+
+# Define if we install chart support
+netdata_manage_charts: false
+
+# Define Netdata config file path
+netdata_config_dir: "/etc/netdata"
+
+# Define the Netdata custom config directory
+netdata_custom_config_path: ""
+
+# Define the Netdata chart directory
+netdata_chart_dir: "/usr/libexec/netdata/charts.d"
+
+# Define the Netdata custom chart directory
+netdata_custom_charts_path: ""
+
+# Allow for injecting a claim token if using Netdata Cloud
+netdata_proxy: ""
+netdata_claim: false
+netdata_claim_url: "https://app.netdata.cloud"
+netdata_claim_token: ""
+netdata_claim_rooms: ""
+
+# Define the Netdata repository URLs and associated key files
+netdata_repository_url: "http://repo.netdata.cloud/repos/"
+netdata_repoconfig_url: "http://repo.netdata.cloud/repoconfig/"
+netdata_repository_key_url: "https://repo.netdata.cloud/netdatabot.gpg.key"
+
+# Define config for enabled Go integrations
+netdata_go_collector_plugins: []
+  # - name: prometheus
+  #   config:
+  #     job:
+  #       - name: local
+  #         url: http://127.0.0.1:9090/metrics

@@ -1,5 +1,0 @@
-distro: edge
-become: yes
-claim_token: 
-claim_rooms:
-claim_url: https://app.netdata.cloud

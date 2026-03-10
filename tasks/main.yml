@@ -1,0 +1,31 @@
+---
+
+- name: Gather facts
+  ansible.builtin.setup:
+
+- name: Normalize release channel (nightly -> edge)
+  ansible.builtin.set_fact:
+    netdata_release_channel_normalized: >-
+      {{ 'edge' if netdata_release_channel == 'nightly'
+      else netdata_release_channel }}
+
+- name: Install the Netdata Linux agent on Debian/Ubuntu
+  ansible.builtin.include_tasks: install-debian.yml
+  when: >-
+    ('debian' in ansible_facts.distribution | lower) or
+    ('ubuntu' in ansible_facts.distribution | lower)
+
+- name: Install the Netdata Linux agent on OpenSUSE
+  ansible.builtin.include_tasks: install-opensuse.yml
+  when: "'opensuse' in ansible_facts.distribution | lower"
+
+- name: Configure the Netdata Linux agent
+  ansible.builtin.include_tasks: configure-linux.yml
+  when:
+    - netdata_manage_config
+    - ansible_facts.os_family != "Windows"
+    - ansible_facts.os_family != "Darwin"
+
+- name: Claim node if claim_token
+  ansible.builtin.include_tasks: node_claim.yml
+  when: netdata_claim

@@ -1,0 +1,10 @@
+---
+
+- name: Create node claim file
+  ansible.builtin.template:
+    src: claim.conf.j2
+    dest: "{{ netdata_config_dir }}/claim.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload Netdata claiming state

@@ -1,0 +1,52 @@
+name: Integration Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  # Test installation against Debian Bookworm
+  debian-test-job:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:bookworm
+    steps:
+      - name: Install dependencies
+        run: |
+          apt-get -y update; apt-get -y upgrade; apt-get -y install ansible
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Test installation
+        run: |
+          ansible-playbook tests/test.yml
+
+  # Test installation against OpenSUSE Leap 15
+  opensuse-test-job:
+    runs-on: ubuntu-latest
+    container:
+      image: opensuse/leap:15
+    steps:
+      - name: Install dependencies
+        run: |
+          zypper -n refresh; zypper -n update; zypper -n install ansible tar gzip
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Test installation
+        run: |
+          ansible-playbook tests/test.yml
+
+  # Test installation against Ubuntu 24.04
+  ubuntu-test-job:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:24.04
+    steps:
+      - name: Install dependencies
+        run: |
+          apt-get -y update; apt-get -y upgrade; apt-get -y install ansible
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Test installation
+        run: |
+          ansible-playbook tests/test.yml

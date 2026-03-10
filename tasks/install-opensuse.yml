@@ -1,0 +1,50 @@
+---
+
+# Suse
+
+- name: Add repo and install package
+  block:
+
+    - name: Add netfilter repository configuration
+      community.general.zypper_repository:
+        repo: "https://download.opensuse.org/repositories/security:netfilter/openSUSE_Tumbleweed/security:netfilter.repo"
+        state: present
+        auto_import_keys: true
+
+    - name: Install dependencies
+      community.general.zypper:
+        name: libnetfilter_acct1
+        state: present
+
+    - name: Import Netdata GPG key
+      ansible.builtin.rpm_key:
+        state: present
+        key: "{{ netdata_repository_key_url }}"
+
+    - name: Add repository
+      community.general.zypper_repository:
+        name: "netdata"
+        repo: "{{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/opensuse/$releasever/$basearch"
+        state: present
+        auto_import_keys: true
+
+    - name: Add repository configuration
+      community.general.zypper_repository:
+        name: "netdata-repoconfig"
+        repo: "{{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/opensuse/$releasever/$basearch"
+        state: present
+        auto_import_keys: true
+
+    - name: Install package
+      community.general.zypper:
+        name: netdata
+        state: present
+        disable_recommends: false
+      notify: Restart Netdata
+
+    - name: Install chart support if enabled
+      community.general.zypper:
+        name: netdata-plugin-chartsd
+        state: present
+      notify: Restart Netdata
+      when: netdata_manage_charts

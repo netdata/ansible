@@ -1,8 +1,0 @@
-- name: Claim netdata node
-  hosts: all
-  remote_user: "{{ansible_user}}"
-  gather_facts: true
-  become: true
-
-  roles:
-      - role: claim

@@ -1,52 +1,42 @@
-# Example of basic Netdata agent management using Ansible
-
-## Prerequisites
-
-Tested with Ansible v. 2.12.1; should work with any Ansible version since 2.9
-
-You have to edit the inventory file `hosts` and, perhaps, `ansible.cfg`.
-It is likely that you will also want to edit netdata agent configuration file(s).
-
-Requires jmespath installed on the host system
+# Netdata Ansible
 
 ## Tested on
 
-`Centos 7, Rocky 8, Oracle Linux 8, Fedora 35`
+- Debian 12
+- SUSE Linux Enterprise Server 15
 
-`Debian 10, Debian 11, Ubuntu 18, Ubuntu 20, Ubuntu22`
+## Utilization
 
-## Playbook components, a short description
+To install Netdata on a host, you can use the following playbook:
 
-> netdata-agent.yml:
+```yaml
+- hosts: all
+  roles:
+    - role: netdata
+```
 
-Installs Netdata Packagecloud repository whenever possible.
-Installs Netdata agent latest available version, trying to avoid installation from other repositories. By default, the 'edge' is used. You can change the default in group_vars/all or set it in the command line using external variable:
+To install Netdata on a host and configure it to send metrics to a Netdata Cloud account, you can use the following playbook:
 
-`ansible-playbook -e "distro=stable" netdata-agent.yml`
+```yaml
+- hosts: all
+  roles:
+    - role: netdata
+      vars:
+        netdata_claim: true
+        netdata_claim_token: "YOUR_NETDATA_CLAIM_TOKEN"
+```
 
-Or you can set in on per host basis, using inventory file or hosts_var/hostname.
+To install Netdata on a host and enable custom configuration or charts, you can use the following playbook:
 
-> purge.yml:
-
-Removes both installed repository and the package, making efforts to remove all possible remains like the log or configuration files.
-
-> claim.yml:
-
-Claims the agent against Netdata Cloud
-
-## Parameters
-
-Playbooks behavior is parameterized to some extent. You may add or change the global settings in `group_vars/all` file or on per host basis in corresponding files in `host_vars/`
-You might also want to set some parameters in inventory file, of course. Or directly in the command line. Examples:
-
-`ansible-playbook --limit=debian10,ubuntu20 netdata-agent.yml`
-
-`ansible-playbook -u toor --limit=rocky8 -e "distro=edge" purge.yml`
-
-*Warning.*
-
-You cannot just switch from stable to edge repos (nor visa versa). You have to purge existing installation first.
-
-## To do
-
-- The only agent configuration file used for the time being is `netdata.conf`. Perhaps, other configuration files handling should be added.
+```yaml
+- hosts: all
+  roles:
+    - role: netdata
+      vars:
+        netdata_claim: true
+        netdata_claim_token: "YOUR_NETDATA_CLAIM_TOKEN"
+        netdata_manage_config: true
+        netdata_manage_charts: true
+        netdata_custom_config_path: "/path/to/custom/netdata.conf.j2"
+        netdata_custom_charts_path: "/path/to/custom/charts/"
+```
