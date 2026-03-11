@@ -30,7 +30,7 @@ netdata-ansible/
     example.chart.j2        # Test chart template
   .github/
     workflows/
-      linux-ci.yml          # Integration tests (Debian, openSUSE, Ubuntu containers)
+      linux-ci.yml          # Integration tests (matrix strategy, 6 OS versions)
       linting.yml           # Ansible Lint checks
     CODEOWNERS              # Code ownership rules
   README.md                 # User-facing documentation
@@ -43,15 +43,25 @@ Two GitHub Actions workflows run on every push and pull request:
 
 ### Integration Test (`linux-ci.yml`)
 
-Runs `ansible-playbook tests/test.yml` inside three container environments:
+Uses GitHub Actions matrix strategy to run `ansible-playbook tests/test.yml` across six container environments, organized into two jobs by package manager:
 
-| Job | Container Image |
-|-----|----------------|
-| `debian-test-job` | `debian:bookworm` |
-| `opensuse-test-job` | `opensuse/leap:15` |
-| `ubuntu-test-job` | `ubuntu:24.04` |
+**`apt-test`** (Debian and Ubuntu, uses `apt-get`):
 
-Each job installs Ansible inside the container, checks out the code, and runs the test playbook.
+| Container Image |
+|----------------|
+| `debian:bullseye` |
+| `debian:bookworm` |
+| `ubuntu:22.04` |
+| `ubuntu:24.04` |
+
+**`opensuse-test`** (openSUSE Leap, uses `zypper`):
+
+| Container Image |
+|----------------|
+| `opensuse/leap:15.5` |
+| `opensuse/leap:15.6` |
+
+Both jobs set `fail-fast: false` so all matrix entries run even if one fails. Each job installs Ansible inside the container, checks out the code, and runs the test playbook.
 
 ### Linting (`linting.yml`)
 
@@ -66,6 +76,8 @@ All GitHub Actions checkout steps use `actions/checkout@v6` (Node.js 24). Keep t
 ### `meta/main.yml`
 
 Ansible Galaxy role metadata. Valid top-level keys are `galaxy_info`, `dependencies`, and `allow_duplicates` only. Do NOT add a top-level `version` key; Ansible roles derive versions from Git tags, not from role metadata.
+
+The `galaxy_info.platforms` list declares supported platforms for Ansible Galaxy. Platform names and version strings must match the ansible-lint `schema[meta]` rule. When a specific OS minor version is not in the Galaxy schema's allowed enum, use `versions: [all]` instead of explicit version numbers.
 
 ### `defaults/main.yml`
 
