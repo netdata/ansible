@@ -9,17 +9,29 @@
         state: present
         update_cache: true
 
-    - name: Install Netdata repo key.
-      ansible.builtin.apt_key:
+    - name: Ensure keyrings directory exists
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+
+    - name: Download Netdata GPG key
+      ansible.builtin.get_url:
         url: "{{ netdata_repository_key_url }}"
-        id: "6588FDD7B14721FE7C3115E6F9177B5265F56346"
-        state: present
+        dest: /etc/apt/keyrings/netdata.asc
+        mode: "0644"
+
+    - name: Dearmor Netdata GPG key
+      ansible.builtin.command:
+        cmd: gpg --batch --yes --dearmor -o /etc/apt/keyrings/netdata.gpg /etc/apt/keyrings/netdata.asc
+        creates: /etc/apt/keyrings/netdata.gpg
 
     - name: Add repository
       ansible.builtin.apt_repository:
         filename: "netdata"
         repo: >-
-          deb {{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/{{
+          deb [signed-by=/etc/apt/keyrings/netdata.gpg]
+          {{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/{{
           ansible_facts.distribution | lower }}/
           {{ ansible_distribution_release | lower }}/
         state: present
