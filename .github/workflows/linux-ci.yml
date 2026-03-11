@@ -37,16 +37,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image:
-          - opensuse/leap:15.5
-          - opensuse/leap:15.6
+        include:
+          - image: opensuse/leap:15.5
+            community_general_version: ":3.8.8"
+          - image: opensuse/leap:15.6
+            community_general_version: ""
     container:
       image: ${{ matrix.image }}
     steps:
       - name: Install dependencies
         run: |
           zypper -n refresh; zypper -n update; zypper -n install ansible tar gzip
-          ansible-galaxy collection install community.general
+          ansible-galaxy collection install community.general${{ matrix.community_general_version }}
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Test installation
