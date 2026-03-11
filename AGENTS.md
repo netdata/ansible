@@ -75,6 +75,18 @@ All role variables with their defaults. See `README.md` for a complete variable 
 
 Entry point for role execution. Dispatches to platform-specific install tasks based on `ansible_facts.distribution`, then runs configuration and claiming tasks when enabled.
 
+### `tasks/install-debian.yml`
+
+Handles Debian and Ubuntu package installation. Uses the modern `signed-by` keyring approach for GPG key management:
+
+1. Installs `gnupg` (required for key dearmoring).
+2. Creates `/etc/apt/keyrings/` directory.
+3. Downloads the ASCII-armored GPG key to `/etc/apt/keyrings/netdata.asc`.
+4. Dearmors the key to binary format at `/etc/apt/keyrings/netdata.gpg`.
+5. References the binary keyring via `[signed-by=...]` in the apt source line.
+
+Do NOT use `ansible.builtin.apt_key` in this file. It wraps the deprecated `apt-key` utility, which fails on Debian 12+ and Ubuntu 22.04+ with subkey validation errors.
+
 ## Conventions
 
 ### YAML Style
