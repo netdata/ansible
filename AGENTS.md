@@ -61,7 +61,7 @@ Uses GitHub Actions matrix strategy to run `ansible-playbook tests/test.yml` acr
 | `opensuse/leap:15.5` |
 | `opensuse/leap:15.6` |
 
-Both jobs set `fail-fast: false` so all matrix entries run even if one fails. Each job installs Ansible inside the container, checks out the code, and runs the test playbook.
+Both jobs set `fail-fast: false` so all matrix entries run even if one fails. Each job installs Ansible inside the container, checks out the code, and runs the test playbook. The `opensuse-test` job additionally installs the `community.general` Ansible collection via `ansible-galaxy`, because the openSUSE Leap `ansible` package does not bundle it. This collection provides the `community.general.zypper` and `community.general.zypper_repository` modules that the role requires.
 
 ### Linting (`linting.yml`)
 
@@ -98,6 +98,14 @@ Handles Debian and Ubuntu package installation. Uses the modern `signed-by` keyr
 5. References the binary keyring via `[signed-by=...]` in the apt source line.
 
 Do NOT use `ansible.builtin.apt_key` in this file. It wraps the deprecated `apt-key` utility, which fails on Debian 12+ and Ubuntu 22.04+ with subkey validation errors.
+
+### `tasks/install-opensuse.yml`
+
+Handles openSUSE Leap package installation. Installs `libnetfilter_acct1` from the standard Leap repositories, imports the Netdata GPG key, adds the Netdata package repository, and installs the `netdata` package (plus optional chart support).
+
+All zypper-related tasks use the `community.general` collection (`community.general.zypper` and `community.general.zypper_repository`). This collection must be available on the control node.
+
+Do NOT add Tumbleweed repository URLs in this file. Tumbleweed is a separate rolling-release distribution; its repository URLs are invalid on Leap systems and cause connection failures. The `libnetfilter_acct1` package is available from the standard Leap Main Repository and does not require an external repository.
 
 ## Conventions
 
