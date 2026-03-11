@@ -6,11 +6,20 @@ on:
 
 jobs:
 
-  # Test installation against Debian Bookworm
-  debian-test-job:
+  # Test installation on apt-based distributions (Debian and Ubuntu)
+  apt-test:
+    name: "Test (${{ matrix.image }})"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - debian:bullseye
+          - debian:bookworm
+          - ubuntu:22.04
+          - ubuntu:24.04
     container:
-      image: debian:bookworm
+      image: ${{ matrix.image }}
     steps:
       - name: Install dependencies
         run: |
@@ -21,30 +30,22 @@ jobs:
         run: |
           ansible-playbook tests/test.yml
 
-  # Test installation against OpenSUSE Leap 15
-  opensuse-test-job:
+  # Test installation on openSUSE Leap
+  opensuse-test:
+    name: "Test (${{ matrix.image }})"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - opensuse/leap:15.5
+          - opensuse/leap:15.6
     container:
-      image: opensuse/leap:15
+      image: ${{ matrix.image }}
     steps:
       - name: Install dependencies
         run: |
           zypper -n refresh; zypper -n update; zypper -n install ansible tar gzip
-      - name: Checkout code
-        uses: actions/checkout@v6
-      - name: Test installation
-        run: |
-          ansible-playbook tests/test.yml
-
-  # Test installation against Ubuntu 24.04
-  ubuntu-test-job:
-    runs-on: ubuntu-latest
-    container:
-      image: ubuntu:24.04
-    steps:
-      - name: Install dependencies
-        run: |
-          apt-get -y update; apt-get -y upgrade; apt-get -y install ansible
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Test installation

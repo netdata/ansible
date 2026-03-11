@@ -4,9 +4,12 @@ An Ansible role for deploying and configuring the [Netdata](https://www.netdata.
 
 ## Supported Platforms
 
-- Debian 12
-- Ubuntu (all apt-based releases)
-- SUSE Linux Enterprise Server 15 / openSUSE
+- Debian 11 (Bullseye)
+- Debian 12 (Bookworm)
+- Ubuntu 22.04 (Jammy)
+- Ubuntu 24.04 (Noble)
+- openSUSE Leap 15.5
+- openSUSE Leap 15.6
 
 ## Requirements
 
