@@ -16,7 +16,7 @@ jobs:
         run: |
           apt-get -y update; apt-get -y upgrade; apt-get -y install ansible
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Test installation
         run: |
           ansible-playbook tests/test.yml
@@ -31,7 +31,7 @@ jobs:
         run: |
           zypper -n refresh; zypper -n update; zypper -n install ansible tar gzip
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Test installation
         run: |
           ansible-playbook tests/test.yml
@@ -46,7 +46,7 @@ jobs:
         run: |
           apt-get -y update; apt-get -y upgrade; apt-get -y install ansible
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Test installation
         run: |
           ansible-playbook tests/test.yml
