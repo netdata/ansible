@@ -46,6 +46,7 @@ jobs:
       - name: Install dependencies
         run: |
           zypper -n refresh; zypper -n update; zypper -n install ansible tar gzip
+          ansible-galaxy collection install community.general
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Test installation

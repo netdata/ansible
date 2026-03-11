@@ -5,12 +5,6 @@
 - name: Add repo and install package
   block:
 
-    - name: Add netfilter repository configuration
-      community.general.zypper_repository:
-        repo: "https://download.opensuse.org/repositories/security:netfilter/openSUSE_Tumbleweed/security:netfilter.repo"
-        state: present
-        auto_import_keys: true
-
     - name: Install dependencies
       community.general.zypper:
         name: libnetfilter_acct1
