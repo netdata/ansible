@@ -30,7 +30,7 @@ jobs:
         run: |
           ansible-playbook tests/test.yml
 
-  # Test installation on openSUSE Leap
+  # Test installation on openSUSE (Leap and Tumbleweed)
   opensuse-test:
     name: "Test (${{ matrix.image }})"
     runs-on: ubuntu-latest
@@ -38,11 +38,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - image: opensuse/leap:15.5
-            community_general_version: ":3.8.8"
           - image: opensuse/leap:15.6
             community_general_version: ""
           - image: opensuse/leap:16.0
+            community_general_version: ""
+          - image: opensuse/tumbleweed
             community_general_version: ""
     container:
       image: ${{ matrix.image }}

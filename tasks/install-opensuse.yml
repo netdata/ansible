@@ -11,6 +11,12 @@
         state: present
       when: ansible_distribution_major_version is version('16', '<')
 
+    - name: Set repository version path
+      ansible.builtin.set_fact:
+        netdata_opensuse_releasever: >-
+          {{ 'tumbleweed' if 'tumbleweed' in ansible_facts.distribution | lower
+          else '$releasever' }}
+
     - name: Import Netdata GPG key
       ansible.builtin.rpm_key:
         state: present
@@ -19,14 +25,14 @@
     - name: Add repository
       community.general.zypper_repository:
         name: "netdata"
-        repo: "{{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/opensuse/$releasever/$basearch"
+        repo: "{{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/opensuse/{{ netdata_opensuse_releasever }}/$basearch"
         state: present
         auto_import_keys: true
 
     - name: Add repository configuration
       community.general.zypper_repository:
         name: "netdata-repoconfig"
-        repo: "{{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/opensuse/$releasever/$basearch"
+        repo: "{{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/opensuse/{{ netdata_opensuse_releasever }}/$basearch"
         state: present
         auto_import_keys: true
 
