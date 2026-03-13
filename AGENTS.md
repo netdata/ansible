@@ -30,7 +30,7 @@ netdata-ansible/
     example.chart.j2        # Test chart template
   .github/
     workflows/
-      linux-ci.yml          # Integration tests (matrix strategy, 6 OS versions)
+      linux-ci.yml          # Integration tests (matrix strategy, 7 OS versions)
       linting.yml           # Ansible Lint checks
     CODEOWNERS              # Code ownership rules
   .gitignore                 # Git ignore rules (excludes .fastforward/)
@@ -44,7 +44,7 @@ Two GitHub Actions workflows run on every push and pull request:
 
 ### Integration Test (`linux-ci.yml`)
 
-Uses GitHub Actions matrix strategy to run `ansible-playbook tests/test.yml` across six container environments, organized into two jobs by package manager:
+Uses GitHub Actions matrix strategy to run `ansible-playbook tests/test.yml` across seven container environments, organized into two jobs by package manager:
 
 **`apt-test`** (Debian and Ubuntu, uses `apt-get`):
 
@@ -59,12 +59,13 @@ Uses GitHub Actions matrix strategy to run `ansible-playbook tests/test.yml` acr
 
 | Container Image | `community.general` Version |
 |----------------|----------------------------|
+| `opensuse/leap:15.5` | 3.8.8 |
 | `opensuse/leap:15.6` | latest |
 | `opensuse/leap:16.0` | latest |
 
 Both jobs set `fail-fast: false` so all matrix entries run even if one fails. Each job installs Ansible inside the container, checks out the code, and runs the test playbook. The `opensuse-test` job additionally installs the `community.general` Ansible collection via `ansible-galaxy`, because the openSUSE Leap `ansible` package does not bundle it. This collection provides the `community.general.zypper` and `community.general.zypper_repository` modules that the role requires.
 
-The `opensuse-test` matrix uses `include` entries with a `community_general_version` variable to control the installed collection version per image. Both current entries (15.6 and 16.0) install the latest version. When adding new openSUSE matrix entries, check the Python version in the container and set `community_general_version` accordingly. If the Python version is below 3.7, pin `community.general` to 3.8.8 (the last release supporting Python 3.6 and Ansible 2.9).
+The `opensuse-test` matrix uses `include` entries with a `community_general_version` variable to control the installed collection version per image. The 15.6 and 16.0 entries install the latest version. The 15.5 entry pins version 3.8.8 because openSUSE Leap 15.5 ships Python 3.6, which is incompatible with newer releases. When adding new openSUSE matrix entries, check the Python version in the container and set `community_general_version` accordingly. If the Python version is below 3.7, pin `community.general` to 3.8.8 (the last release supporting Python 3.6 and Ansible 2.9).
 
 ### Linting (`linting.yml`)
 
@@ -104,11 +105,11 @@ Do NOT use `ansible.builtin.apt_key` in this file. It wraps the deprecated `apt-
 
 ### `tasks/install-opensuse.yml`
 
-Handles openSUSE Leap package installation. Installs `libnetfilter_acct1` from the standard Leap repositories, imports the Netdata GPG key, adds the Netdata package repository, and installs the `netdata` package (plus optional chart support).
+Handles openSUSE Leap package installation. Installs `libnetfilter_acct1` from the standard Leap 15.x repositories (skipped on Leap 16.0+ where the package is unavailable), imports the Netdata GPG key, adds the Netdata package repository, and installs the `netdata` package (plus optional chart support).
 
 All zypper-related tasks use the `community.general` collection (`community.general.zypper` and `community.general.zypper_repository`). This collection must be available on the control node.
 
-Do NOT add Tumbleweed repository URLs in this file. Tumbleweed is a separate rolling-release distribution; its repository URLs are invalid on Leap systems and cause connection failures. The `libnetfilter_acct1` package is available from the standard Leap Main Repository and does not require an external repository.
+Do NOT add Tumbleweed repository URLs in this file. Tumbleweed is a separate rolling-release distribution; its repository URLs are invalid on Leap systems and cause connection failures. The `libnetfilter_acct1` package is available from the standard Leap 15.x Main Repository and does not require an external repository. It is not available on Leap 16.0+; the install task skips it on those versions via a `when` condition.
 
 ## Conventions
 
