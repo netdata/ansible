@@ -9,6 +9,7 @@
       community.general.zypper:
         name: libnetfilter_acct1
         state: present
+      when: ansible_distribution_major_version is version('16', '<')
 
     - name: Import Netdata GPG key
       ansible.builtin.rpm_key:
