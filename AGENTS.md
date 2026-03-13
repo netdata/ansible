@@ -33,6 +33,7 @@ netdata-ansible/
       linux-ci.yml          # Integration tests (matrix strategy, 6 OS versions)
       linting.yml           # Ansible Lint checks
     CODEOWNERS              # Code ownership rules
+  .gitignore                 # Git ignore rules (excludes .fastforward/)
   README.md                 # User-facing documentation
   AGENTS.md                 # This file
 ```
@@ -131,6 +132,11 @@ Do NOT add Tumbleweed repository URLs in this file. Tumbleweed is a separate rol
 
 - All role variables are prefixed with `netdata_`.
 - Boolean variables use `true`/`false`, not `yes`/`no`.
+
+### Git Ignore Rules
+
+- The `.gitignore` file excludes `.fastforward/` (the runtime artifact directory used by multi-session AI workflows).
+- Do NOT commit files under `.fastforward/`. If a file gets tracked before its `.gitignore` entry exists, remove it from the index with `git rm --cached <path>`. Do NOT use `git rm` without `--cached`; that deletes the file from disk.
 
 ### Commit Messages
 
