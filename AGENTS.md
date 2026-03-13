@@ -59,12 +59,12 @@ Uses GitHub Actions matrix strategy to run `ansible-playbook tests/test.yml` acr
 
 | Container Image | `community.general` Version |
 |----------------|----------------------------|
-| `opensuse/leap:15.5` | 3.8.8 (pinned) |
 | `opensuse/leap:15.6` | latest |
+| `opensuse/leap:16.0` | latest |
 
 Both jobs set `fail-fast: false` so all matrix entries run even if one fails. Each job installs Ansible inside the container, checks out the code, and runs the test playbook. The `opensuse-test` job additionally installs the `community.general` Ansible collection via `ansible-galaxy`, because the openSUSE Leap `ansible` package does not bundle it. This collection provides the `community.general.zypper` and `community.general.zypper_repository` modules that the role requires.
 
-The `opensuse-test` matrix uses `include` entries with a `community_general_version` variable to control the installed collection version per image. openSUSE Leap 15.5 ships Python 3.6, which is incompatible with `community.general` 4.0+ (those releases use `from __future__ import annotations`, a Python 3.7+ feature). The 15.5 entry pins `community.general` to 3.8.8, the last release supporting Python 3.6 and Ansible 2.9. The 15.6 entry installs the latest version. When adding new openSUSE matrix entries, check the Python version in the container and set `community_general_version` accordingly.
+The `opensuse-test` matrix uses `include` entries with a `community_general_version` variable to control the installed collection version per image. Both current entries (15.6 and 16.0) install the latest version. When adding new openSUSE matrix entries, check the Python version in the container and set `community_general_version` accordingly. If the Python version is below 3.7, pin `community.general` to 3.8.8 (the last release supporting Python 3.6 and Ansible 2.9).
 
 ### Linting (`linting.yml`)
 

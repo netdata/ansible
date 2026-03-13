@@ -8,8 +8,8 @@ An Ansible role for deploying and configuring the [Netdata](https://www.netdata.
 - Debian 12 (Bookworm)
 - Ubuntu 22.04 (Jammy)
 - Ubuntu 24.04 (Noble)
-- openSUSE Leap 15.5
 - openSUSE Leap 15.6
+- openSUSE Leap 16.0
 
 ## Requirements
 
