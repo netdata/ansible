@@ -28,6 +28,10 @@ netdata-ansible/
     test.yml                # CI integration test playbook
     netdata.conf.j2         # Test configuration template
     example.chart.j2        # Test chart template
+    roles/netdata           # Symlink to repository root (`../../`) so the test
+                            # playbook can reference the role by its name
+                            # (`role: netdata`) via Ansible's default
+                            # roles_path resolution.
   .github/
     workflows/
       linux-ci.yml          # Integration tests (matrix strategy, 7 OS versions)
@@ -127,6 +131,7 @@ The repository URL uses a computed version path segment: the literal string `tum
 ### Testing
 
 - The integration test playbook is `tests/test.yml`. It runs the role against `localhost` with `netdata_manage_config: true` and `netdata_manage_charts: true`.
+- The playbook references the role by name (`role: netdata`). The role is resolved via the `tests/roles/netdata` symlink that points at the repository root (`../../`). This is the standard Ansible Galaxy convention for testing a role from within its own repository. Do NOT change the playbook to use a relative path like `role: ../netdata-ansible`; that path is brittle because Ansible resolves role paths relative to the playbook file, and the parent directory name depends on how the repo was checked out (in CI it is `ansible`, not `netdata-ansible`).
 - CI tests validate that the role installs successfully. They do not validate Netdata runtime behavior (the containers do not run systemd).
 
 ### Variable Naming

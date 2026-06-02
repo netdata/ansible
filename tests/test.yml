@@ -2,7 +2,7 @@
 - name: CI tests for localhost
   hosts: localhost
   roles:
-    - role: ../netdata-ansible
+    - role: netdata
       vars:
         netdata_manage_config: true
         netdata_manage_charts: true
