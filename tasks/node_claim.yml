@@ -4,7 +4,7 @@
   ansible.builtin.template:
     src: claim.conf.j2
     dest: "{{ netdata_config_dir }}/claim.conf"
-    owner: root
-    group: root
-    mode: '0644'
+    owner: "{{ netdata_config_owner }}"
+    group: "{{ netdata_config_group }}"
+    mode: '0640'
   notify: Reload Netdata claiming state
