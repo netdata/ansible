@@ -1,4 +1,0 @@
-FROM {{ item.image | lower }}
-
-RUN apt update && \
-	apt install -y nano curl gpg-agent python3 ca-certificates

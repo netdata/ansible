@@ -1,6 +1,0 @@
----
-# vars file for roles/claim
-
-claim_token: 4p_pe4EUMJ7hyO_DkTicKBRj_jfQXMbRQNaH39dz0YbXOHHrK_5jF9-Sjc5l4DbZMuXVtxE2kVMkP6YXmrYaBRcyg59qVGa0SMx6QhxIGVMMcpzuvom2IFSSaTpBEfBAw-nbcgQ
-claim_rooms: 4d9094b6-810e-458c-a9a0-acf3372e08e5
-claim_url: https://app.netdata.cloud

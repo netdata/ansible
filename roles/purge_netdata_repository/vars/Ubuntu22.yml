@@ -1,7 +1,0 @@
----
-
-dir_list:
-  - /var/log/netdata
-  - /var/lib/netdata
-  - /var/cache/netdata
-  - /usr/libexec/netdata

@@ -1,0 +1,58 @@
+name: Integration Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  # Test installation on apt-based distributions (Debian and Ubuntu)
+  apt-test:
+    name: "Test (${{ matrix.image }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - debian:bullseye
+          - debian:bookworm
+          - ubuntu:22.04
+          - ubuntu:24.04
+    container:
+      image: ${{ matrix.image }}
+    steps:
+      - name: Install dependencies
+        run: |
+          apt-get -y update; apt-get -y upgrade; apt-get -y install ansible
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Test installation
+        run: |
+          ansible-playbook tests/test.yml
+
+  # Test installation on openSUSE (Leap and Tumbleweed)
+  opensuse-test:
+    name: "Test (${{ matrix.image }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: opensuse/leap:15.6
+            community_general_version: ""
+          - image: opensuse/leap:16.0
+            community_general_version: ""
+          - image: opensuse/tumbleweed
+            community_general_version: ""
+    container:
+      image: ${{ matrix.image }}
+    steps:
+      - name: Install dependencies
+        run: |
+          zypper -n refresh; zypper -n update; zypper -n install ansible tar gzip
+          ansible-galaxy collection install community.general${{ matrix.community_general_version }}
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Test installation
+        run: |
+          ansible-playbook tests/test.yml

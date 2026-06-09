@@ -1,7 +1,0 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include install-netdata-repository"
-      ansible.builtin.include_role:
-        name: roles/install_netdata_repository

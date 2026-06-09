@@ -1,0 +1,43 @@
+- name: Apply the netdata.conf.j2 template
+  ansible.builtin.template:
+    src: "{{ netdata_custom_config_path }}"
+    dest: "{{ netdata_config_dir }}/netdata.conf"
+    owner: root
+    group: netdata
+    mode: '0644'
+  when:
+    - netdata_manage_config
+    - netdata_custom_config_path != ""
+  notify: Restart Netdata
+
+- name: Configure Go Collector Plugins
+  ansible.builtin.template:
+    src: go.d/plugin.conf.j2
+    dest: "{{ netdata_config_dir }}/go.d/{{ item.name }}.conf"
+    owner: root
+    group: netdata
+    mode: '0644'
+  loop: "{{ netdata_go_collector_plugins }}"
+  loop_control:
+    label: "{{ item.name | default(omit) }}"
+  when:
+    - netdata_go_collector_plugins is defined
+    - netdata_go_collector_plugins | length > 0
+  notify: Restart Netdata
+
+- name: Process all Jinja2 chart templates
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: >-
+      {{ netdata_chart_dir }}/{{ item | basename
+      | regex_replace('\.j2$', '') }}
+    owner: root
+    group: netdata
+    mode: '0750'
+  loop: >-
+    {{ lookup('fileglob',
+    netdata_custom_charts_path + '/*.j2', wantlist=True) }}
+  when:
+    - netdata_manage_charts
+    - netdata_custom_charts_path != ""
+  notify: Restart Netdata

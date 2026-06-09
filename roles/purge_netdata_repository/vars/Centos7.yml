@@ -1,3 +1,0 @@
----
-
-netdata_repo_package: "{{ 'netdata-repo' if distro == 'stable' else 'netdata-repo-edge' }}"

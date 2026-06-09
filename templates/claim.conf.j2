@@ -1,0 +1,7 @@
+[global]
+    url = {{ netdata_claim_url }}
+    token = {{ netdata_claim_token }}
+    rooms = {{ netdata_claim_rooms }}
+    {% if netdata_proxy %}
+        proxy = {{ netdata_proxy }}
+    {% endif %}

@@ -1,8 +1,0 @@
-- name: Purge netdata agent and netdata agent repository
-  hosts: all
-  gather_facts: true
-  become: true
-
-  roles:
-    - { role: purge_netdata_agent, become: true }
-    - { role: purge_netdata_repository, become: true }

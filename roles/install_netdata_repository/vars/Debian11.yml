@@ -1,3 +1,0 @@
----
-
-repo_uri: "{{ 'https://packagecloud.io/netdata/netdata/packages/debian/bullseye/netdata-repo_1-1_all.deb/download.deb' if distro == 'stable' else 'https://packagecloud.io/netdata/netdata/packages/debian/bullseye/netdata-repo-edge_1-1_all.deb/download.deb' }}"

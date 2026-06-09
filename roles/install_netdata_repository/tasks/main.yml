@@ -1,7 +1,0 @@
----
-# tasks file for roles/netdata-repository
-- name: Include OS specific vars
-  ansible.builtin.include_vars: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"
-
-- name: Include OS specific tasks
-  ansible.builtin.include_tasks: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}.yml"

@@ -1,47 +1,121 @@
-# Example of basic Netdata agent management using Ansible
-## Prerequisites
-Tested with Ansible v. 2.12.1; should work with any Ansible version since 2.9
+# Netdata Ansible
 
-You have to edit the inventory file `hosts` and, perhaps, `ansible.cfg`.
-It is likely that you will also want to edit netdata agent configuration file(s).
+An Ansible role for deploying and configuring the [Netdata](https://www.netdata.cloud/) monitoring agent on Linux systems.
 
-Requires jmespath installed on the host system
-## Tested on
-`Centos 7, Rocky 8, Oracle Linux 8, Fedora 35`
+## Supported Platforms
 
-`Debian 10, Debian 11, Ubuntu 18, Ubuntu 20, Ubuntu22`
+- Debian 11 (Bullseye)
+- Debian 12 (Bookworm)
+- Ubuntu 22.04 (Jammy)
+- Ubuntu 24.04 (Noble)
+- openSUSE Leap 15.6
+- openSUSE Leap 16.0
+- openSUSE Tumbleweed
 
-## Playbook components, a short description
-> netdata-agent.yml:
+## Requirements
 
-Installs Netdata Packagecloud repository whenever possible.
-Installs Netdata agent latest available version, trying to avoid installation from other repositories. By default, the 'edge' is used. You can change the default in group_vars/all or set it in the command line using external variable:
+- Ansible 2.1 or later
+- Target hosts must use `systemd` as their service manager
 
-`ansible-playbook -e "distro=stable" netdata-agent.yml`
+## Installation
 
-Or you can set in on per host basis, using inventory file or hosts_var/hostname.
+Include the role in your playbook or install it via Ansible Galaxy:
 
-> purge.yml:
+```bash
+ansible-galaxy install netdata.netdata
+```
 
-Removes both installed repository and the package, making efforts to remove all possible remains like the log or configuration files.
+## Usage
 
-> claim.yml:
+### Basic Installation
 
-Claims the agent against Netdata Cloud
+Install Netdata with default settings (stable release channel):
 
-## Parameters
+```yaml
+- hosts: all
+  roles:
+    - role: netdata
+```
 
-Playbooks behavior is parameterized to some extent. You may add or change the global settings in `group_vars/all` file or on per host basis in corresponding files in `host_vars/`
-You might also want to set some parameters in inventory file, of course. Or directly in the command line. Examples:
+### Claim Node to Netdata Cloud
 
-`ansible-playbook --limit=debian10,ubuntu20 netdata-agent.yml`
+Install Netdata and register the node with your Netdata Cloud account:
 
-`ansible-playbook -u toor --limit=rocky8 -e "distro=edge" purge.yml`
+```yaml
+- hosts: all
+  roles:
+    - role: netdata
+      vars:
+        netdata_claim: true
+        netdata_claim_token: "YOUR_NETDATA_CLAIM_TOKEN"
+        netdata_claim_rooms: "YOUR_ROOM_ID"
+```
 
-*Warning.*
+### Use the Nightly (Edge) Release Channel
 
-You cannot just switch from stable to edge repos (nor visa versa). You have to purge existing installation first.
+Set `netdata_release_channel` to `nightly` or `edge` to install the latest development builds:
 
-## To do
+```yaml
+- hosts: all
+  roles:
+    - role: netdata
+      vars:
+        netdata_release_channel: "nightly"
+```
 
-- The only agent configuration file used for the time being is `netdata.conf`. Perhaps, other configuration files handling should be added.
+### Custom Configuration and Charts
+
+Manage Netdata configuration files and custom chart templates:
+
+```yaml
+- hosts: all
+  roles:
+    - role: netdata
+      vars:
+        netdata_claim: true
+        netdata_claim_token: "YOUR_NETDATA_CLAIM_TOKEN"
+        netdata_manage_config: true
+        netdata_manage_charts: true
+        netdata_custom_config_path: "/path/to/custom/netdata.conf.j2"
+        netdata_custom_charts_path: "/path/to/custom/charts/"
+```
+
+### Go Collector Plugins
+
+Configure Go-based collector plugins (for example, Prometheus scraping):
+
+```yaml
+- hosts: all
+  roles:
+    - role: netdata
+      vars:
+        netdata_manage_config: true
+        netdata_go_collector_plugins:
+          - name: prometheus
+            config:
+              job:
+                - name: local
+                  url: http://127.0.0.1:9090/metrics
+```
+
+## Role Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `netdata_release_channel` | Release channel: `stable`, `nightly`, or `edge`. `nightly` is an alias for `edge`. | `"stable"` |
+| `netdata_manage_config` | Enable management of Netdata configuration files. | `false` |
+| `netdata_manage_charts` | Enable installation of chart support and custom chart templates. | `false` |
+| `netdata_config_dir` | Path to the Netdata configuration directory. | `"/etc/netdata"` |
+| `netdata_custom_config_path` | Path to a custom `netdata.conf.j2` Jinja2 template. Leave empty to skip. | `""` |
+| `netdata_chart_dir` | Path to the Netdata charts.d plugin directory. | `"/usr/libexec/netdata/charts.d"` |
+| `netdata_custom_charts_path` | Path to a directory of custom `.j2` chart templates. Leave empty to skip. | `""` |
+| `netdata_claim` | Enable Netdata Cloud node claiming. | `false` |
+| `netdata_claim_token` | Claim token from Netdata Cloud. | `""` |
+| `netdata_claim_url` | Netdata Cloud claim URL. | `"https://app.netdata.cloud"` |
+| `netdata_claim_rooms` | Comma-separated list of Netdata Cloud room IDs. | `""` |
+| `netdata_proxy` | Proxy URL for Netdata Cloud connections. Leave empty to disable. | `""` |
+| `netdata_go_collector_plugins` | List of Go collector plugin configurations. See usage example above. | `[]` |
+
+## License
+
+Apache-2.0
