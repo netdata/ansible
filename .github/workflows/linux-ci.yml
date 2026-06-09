@@ -16,8 +16,10 @@ jobs:
         image:
           - debian:bullseye
           - debian:bookworm
+          - debian:trixie
           - ubuntu:22.04
           - ubuntu:24.04
+          - ubuntu:26.04
     container:
       image: ${{ matrix.image }}
     steps:

@@ -6,8 +6,10 @@ An Ansible role for deploying and configuring the [Netdata](https://www.netdata.
 
 - Debian 11 (Bullseye)
 - Debian 12 (Bookworm)
+- Debian 13 (Trixie)
 - Ubuntu 22.04 (Jammy)
 - Ubuntu 24.04 (Noble)
+- Ubuntu 26.04 (Resolute)
 - openSUSE Leap 15.6
 - openSUSE Leap 16.0
 - openSUSE Tumbleweed
