@@ -1,7 +1,7 @@
 galaxy_info:
   author: Ralph Meijer
-  description: Deploys the NetData agent
-  company: Netdata Inc.
+  description: Deploys the Netdata Agent
+  company: Netdata, Inc.
   role_name: netdata
 
   license: Apache-2.0
