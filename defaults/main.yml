@@ -12,6 +12,11 @@ netdata_manage_charts: false
 # Define Netdata config file path
 netdata_config_dir: "/etc/netdata"
 
+# Define our default file ownership for config files (Linux only)
+netdata_config_owner: root
+netdata_config_group: netdata
+netdata_config_mode: '0644'
+
 # Define the Netdata custom config directory
 netdata_custom_config_path: ""
 

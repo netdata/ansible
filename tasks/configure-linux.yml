@@ -2,9 +2,9 @@
   ansible.builtin.template:
     src: "{{ netdata_custom_config_path }}"
     dest: "{{ netdata_config_dir }}/netdata.conf"
-    owner: root
-    group: netdata
-    mode: '0644'
+    owner: "{{ netdata_config_owner }}"
+    group: "{{ netdata_config_group }}"
+    mode: "{{ netdata_config_mode }}"
   when:
     - netdata_manage_config
     - netdata_custom_config_path != ""
@@ -14,9 +14,9 @@
   ansible.builtin.template:
     src: go.d/plugin.conf.j2
     dest: "{{ netdata_config_dir }}/go.d/{{ item.name }}.conf"
-    owner: root
-    group: netdata
-    mode: '0644'
+    owner: "{{ netdata_config_owner }}"
+    group: "{{ netdata_config_group }}"
+    mode: "{{ netdata_config_mode }}"
   loop: "{{ netdata_go_collector_plugins }}"
   loop_control:
     label: "{{ item.name | default(omit) }}"
@@ -31,8 +31,8 @@
     dest: >-
       {{ netdata_chart_dir }}/{{ item | basename
       | regex_replace('\.j2$', '') }}
-    owner: root
-    group: netdata
+    owner: "{{ netdata_config_owner }}"
+    group: "{{ netdata_config_group }}"
     mode: '0750'
   loop: >-
     {{ lookup('fileglob',
