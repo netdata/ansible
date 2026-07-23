@@ -1,7 +1,12 @@
 ---
-
 - name: Gather facts
   ansible.builtin.setup:
+
+- name: "Assert the platform is supported"
+  ansible.builtin.assert:
+    that: ansible_os_family in netdata_linux_os_families
+    fail_msg: "netdata: unsupported os_family '{{ ansible_os_family }}'"
+    quiet: true
 
 - name: Normalize release channel (nightly -> edge)
   ansible.builtin.set_fact:
@@ -11,13 +16,18 @@
 
 - name: Install the Netdata Linux agent on Debian/Ubuntu
   ansible.builtin.include_tasks: install-debian.yml
-  when: >-
-    ('debian' in ansible_facts.distribution | lower) or
-    ('ubuntu' in ansible_facts.distribution | lower)
+  when:
+    - ansible_os_family == 'Debian'
 
 - name: Install the Netdata Linux agent on OpenSUSE
   ansible.builtin.include_tasks: install-opensuse.yml
-  when: "'opensuse' in ansible_facts.distribution | lower"
+  when:
+    - "'opensuse' in ansible_facts.distribution | lower"
+
+- name: Install the Netdata Linux agent on RedHat family distros
+  ansible.builtin.include_tasks: install-redhat.yml
+  when:
+    - ansible_os_family == 'RedHat'
 
 - name: Configure the Netdata Linux agent
   ansible.builtin.include_tasks: configure-linux.yml
@@ -29,3 +39,4 @@
 - name: Claim node if claim_token
   ansible.builtin.include_tasks: node_claim.yml
   when: netdata_claim
+...
