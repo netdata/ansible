@@ -11,3 +11,9 @@
   ansible.builtin.command: netdatacli reload-claiming-state
   changed_when: true
   failed_when: false
+
+- name: "Update dnf cache"
+  become: true
+  ansible.builtin.dnf:
+    update_cache: true
+...
