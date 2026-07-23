@@ -1,0 +1,66 @@
+# Notices for Netdata
+
+This project is produced and maintained by the Netdata authors.  This software incorporates material from third parties.
+
+## Copyright
+
+All content is the property of the respective authors or their employers.  Every attempt will be made in good faith to track third party code and licences in the Attributions section of this document.
+
+The software directly provided by this project is released under the Apache License 2.0, which has a Redistribution clause that protects third party code.
+
+Copies of the licenses that cover all of the included source code are at the bottom of this document for reference.
+
+If you find code in this repository that you feel violates copyright, be it your copyright or anybody elses, please notify the authors in the first instance, preferably in a non-confrontational way.  Like you would communicate with a friend or colleague.  We respect the copyrights of others and their license choices, and if we're in error in any way, we want to rectify that immediately.
+
+## Cryptography
+
+Content may contain encryption software. The country in which you are currently
+may have restrictions on the import, possession, and use, and/or re-export to
+another country, of encryption software. BEFORE using any encryption software,
+please check the country's laws, regulations and policies concerning the import,
+possession, or use, and re-export of encryption software, to see if this is
+permitted.
+
+## Attributions
+
+### ansible-role-netdata (Daniel Gibbs)
+
+Portions of this role are derived from
+[dgibbs64/ansible-role-netdata](https://github.com/dgibbs64/ansible-role-netdata),
+used under the MIT License.
+
+- Source: https://github.com/dgibbs64/ansible-role-netdata
+- License: MIT (full text under "Third-party licenses" below)
+- Copyright (c) 2026 Daniel Gibbs
+
+Derived material:
+
+- `tasks/install-redhat.yml` — RedHat-family repository and package setup
+
+Other files may contain patterns adapted from the same source.  This list is
+maintained in good faith; if you identify further derived material, please
+raise it so it can be credited.
+
+## Third-party licenses
+
+### The MIT License (MIT) — dgibbs64/ansible-role-netdata
+
+Copyright (c) 2026 Daniel Gibbs
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
