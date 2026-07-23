@@ -33,7 +33,9 @@
 
 - name: "Ensure netdata repository is configured: {{ netdata_release_channel_normalized }}"
   ansible.builtin.yum_repository:
-    baseurl: "{{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/{{ netdata_el_repo_distro }}/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/"
+    baseurl: "{{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/\
+      {{ netdata_el_repo_distro }}/\
+      {{ ansible_distribution_major_version }}/{{ ansible_architecture }}/"
     description: Netdata {{ netdata_release_channel_normalized }}
     state: present
     enabled: true
@@ -59,10 +61,10 @@
     state: present
     update_cache: true
 
-- name: Install chart support if enabled
+- name: "Install chart support if enabled"
   ansible.builtin.dnf:
     name: "netdata-plugin-chartsd"
     state: present
-  notify: Restart Netdata
+  notify: "Restart Netdata"
   when: netdata_manage_charts
 ...
