@@ -34,9 +34,16 @@ netdata_claim_token: ""
 netdata_claim_rooms: ""
 
 # Define the Netdata repository URLs and associated key files
-netdata_repository_url: "http://repo.netdata.cloud/repos/"
-netdata_repoconfig_url: "http://repo.netdata.cloud/repoconfig/"
+netdata_repository_url: "https://repo.netdata.cloud/repos/"
+netdata_repoconfig_url: "https://repo.netdata.cloud/repoconfig/"
 netdata_repository_key_url: "https://repo.netdata.cloud/netdatabot.gpg.key"
+netdata_repository_old_key_url: "https://repo.netdata.cloud/netdatabot.old.gpg.key"
+
+# OS families this role installs on
+netdata_linux_os_families:
+  - Debian
+  - RedHat
+  - Suse
 
 # Define config for enabled Go integrations
 netdata_go_collector_plugins: []
