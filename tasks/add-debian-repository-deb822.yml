@@ -1,0 +1,10 @@
+---
+- name: Add Netdata APT repository
+  ansible.builtin.deb822_repository:
+    name: netdata
+    uris: >-
+      {{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/{{
+      ansible_facts.distribution | lower }}
+    suites: "{{ ansible_facts['distribution_release'] | lower }}/"
+    signed_by: /etc/apt/keyrings/netdata.gpg
+    state: present

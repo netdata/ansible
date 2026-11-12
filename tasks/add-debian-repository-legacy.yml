@@ -1,0 +1,10 @@
+---
+- name: Add Netdata APT source for older Ansible
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/netdata.list
+    content: >-
+      deb [signed-by=/etc/apt/keyrings/netdata.gpg]
+      {{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/{{
+      ansible_facts.distribution | lower }}
+      {{ ansible_facts['distribution_release'] | lower }}/
+    mode: "0644"

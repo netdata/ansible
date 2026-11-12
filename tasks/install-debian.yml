@@ -26,15 +26,25 @@
         cmd: gpg --batch --yes --dearmor -o /etc/apt/keyrings/netdata.gpg /etc/apt/keyrings/netdata.asc
         creates: /etc/apt/keyrings/netdata.gpg
 
-    - name: Add repository
-      ansible.builtin.apt_repository:
-        filename: "netdata"
-        repo: >-
-          deb [signed-by=/etc/apt/keyrings/netdata.gpg]
-          {{ netdata_repository_url }}{{ netdata_release_channel_normalized }}/{{
-          ansible_facts.distribution | lower }}/
-          {{ ansible_distribution_release | lower }}/
+    - name: Install deb822 repository dependency
+      ansible.builtin.apt:
+        name: python3-debian
         state: present
+      when: ansible_version.full is version('2.15', '>=')
+
+    - name: Remove legacy Netdata repository file
+      ansible.builtin.file:
+        path: /etc/apt/sources.list.d/netdata.list
+        state: absent
+      when: ansible_version.full is version('2.15', '>=')
+
+    - name: Add repository with deb822
+      ansible.builtin.include_tasks: add-debian-repository-deb822.yml
+      when: ansible_version.full is version('2.15', '>=')
+
+    - name: Add repository source for older Ansible
+      ansible.builtin.include_tasks: add-debian-repository-legacy.yml
+      when: ansible_version.full is version('2.15', '<')
 
     - name: Install package
       ansible.builtin.apt:
