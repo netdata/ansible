@@ -5,7 +5,7 @@
     state: restarted
     daemon_reload: true
     enabled: true
-  when: ansible_service_mgr == "systemd"
+  when: ansible_facts['service_mgr'] == "systemd"
 
 - name: Reload Netdata claiming state
   ansible.builtin.command: netdatacli reload-claiming-state
